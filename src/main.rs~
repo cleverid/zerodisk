@@ -1,0 +1,23 @@
+use futures::join;
+use std::{thread, time::Duration};
+
+async fn big_task(name: &str) -> u8 {
+   for n in 1.. 10 {
+      thread::sleep(Duration::from_millis(300));
+       n * 2;
+       println!("{}, {}", name, n);
+   }
+   8
+}
+
+async fn tasks() -> (u8, u8) {
+   let one = big_task("one");
+   let two = big_task("two");
+   join!(one, two)
+}
+
+#[async_std::main]
+async fn main() {
+   tasks().await;
+   println!("{}", "Finish");
+}

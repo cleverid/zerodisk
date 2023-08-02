@@ -1,0 +1,13 @@
+use futures::join;
+
+async fn big_task(name: &str) {
+   println!("{}", name);
+}
+
+fn main() {
+   let one = big_task("one");
+   let two = big_task("two");
+   async {
+   	 join!(one, two);
+	}
+}
