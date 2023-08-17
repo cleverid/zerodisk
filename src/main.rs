@@ -1,23 +1,26 @@
+mod state;
+
 use winit::{
     event::*,
-    event_loop::{ControlFlow, EventLoop},
+    event_loop::{EventLoop, ControlFlow},
     window::WindowBuilder,
 };
 
-fn main() {
+#[tokio::main]
+async fn main() {
     env_logger::init();
     let event_loop = EventLoop::new();
-    let window = WindowBuilder::new().build(&event_loop).unwrap();
+    let _window = WindowBuilder::new().build(&event_loop).unwrap();
+    let _state = state::State::new(&_window).await;
 
     event_loop.run(move |event, _, control_flow| {
-        control_flow.set_wait();
         match event {
             Event::WindowEvent {
                 event: WindowEvent::CloseRequested,
                 ..
             } => {
                 println!("The close button was pressed; stopping");
-                control_flow.set_exit();
+                *control_flow = ControlFlow::Exit;
             }
             _ => (),
         }
