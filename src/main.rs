@@ -2,7 +2,7 @@ mod state;
 
 use winit::{
     event::*,
-    event_loop::{EventLoop, ControlFlow},
+    event_loop::{ControlFlow, EventLoop},
     window::WindowBuilder,
 };
 
@@ -10,19 +10,38 @@ use winit::{
 async fn main() {
     env_logger::init();
     let event_loop = EventLoop::new();
-    let _window = WindowBuilder::new().build(&event_loop).unwrap();
-    let _state = state::State::new(&_window).await;
+    let window = WindowBuilder::new().build(&event_loop).unwrap();
+    let mut state = state::State::new(&window).await;
 
-    event_loop.run(move |event, _, control_flow| {
-        match event {
-            Event::WindowEvent {
-                event: WindowEvent::CloseRequested,
-                ..
-            } => {
-                println!("The close button was pressed; stopping");
-                *control_flow = ControlFlow::Exit;
+    event_loop.run(move |event, _, control_flow| match event {
+        Event::WindowEvent {
+            ref event,
+            window_id,
+            ..
+        } => {
+            if window_id != window.id() {
+                return
             }
-            _ => (),
+            match event {
+                WindowEvent::Resized(physical_size) => {
+                    println!("resized");
+                    state.resize(*physical_size);
+                }
+                WindowEvent::Moved(_) => {
+                    println!("moved");
+                    window.request_redraw();
+                }
+                WindowEvent::ScaleFactorChanged { new_inner_size, .. } => {
+                    println!("scaled");
+                    state.resize(**new_inner_size);
+                }
+                WindowEvent::CloseRequested => {
+                    println!("Close by button");
+                    *control_flow = ControlFlow::Exit;
+                }
+                _ => {}
+            }
         }
+        _ => (),
     });
 }
