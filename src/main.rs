@@ -14,13 +14,22 @@ async fn main() {
     let mut state = state::State::new(&window).await;
 
     event_loop.run(move |event, _, control_flow| match event {
+        Event::RedrawRequested(window_id) if window_id == window.id() => match state.render() {
+            Ok(_) => {}
+            Err(wgpu::SurfaceError::Lost) => state.resize(state.size),
+            Err(wgpu::SurfaceError::OutOfMemory) => *control_flow = ControlFlow::Exit,
+            Err(e) => eprintln!("{:?}", e),
+        },
+        Event::MainEventsCleared => {
+            window.request_redraw();
+        }
         Event::WindowEvent {
             ref event,
             window_id,
             ..
         } => {
             if window_id != window.id() {
-                return
+                return;
             }
             match event {
                 WindowEvent::Resized(physical_size) => {
