@@ -1,3 +1,4 @@
+mod object;
 mod state;
 
 use winit::{
@@ -11,7 +12,9 @@ async fn main() {
     env_logger::init();
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
-    let mut state = state::State::new(&window).await;
+
+    let object = object::Object::new();
+    let mut state = state::State::new(&window, object).await;
 
     event_loop.run(move |event, _, control_flow| match event {
         Event::RedrawRequested(window_id) if window_id == window.id() => match state.render() {
