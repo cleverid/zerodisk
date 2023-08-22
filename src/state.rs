@@ -10,6 +10,7 @@ pub struct State {
     config: wgpu::SurfaceConfiguration,
     pub size: winit::dpi::PhysicalSize<u32>,
     render_pipeline: wgpu::RenderPipeline,
+    vertex_num: u32,
     vertex_buffer: wgpu::Buffer,
 }
 
@@ -92,11 +93,13 @@ impl State {
             multiview: None,
         });
 
+        let vertices = scene.get_vertices();
         let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Vertex Buffer"),
-            contents: bytemuck::cast_slice(scene.get_vertices()),
+            contents: bytemuck::cast_slice(vertices),
             usage: wgpu::BufferUsages::VERTEX,
         });
+        let vertex_num = vertices.len() as u32;
 
         Self {
             surface,
@@ -105,6 +108,7 @@ impl State {
             config,
             size,
             render_pipeline,
+            vertex_num,
             vertex_buffer,
         }
     }
@@ -157,7 +161,7 @@ impl State {
             });
             render_pass.set_pipeline(&self.render_pipeline);
             render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
-            render_pass.draw(0..3, 0..1);
+            render_pass.draw(0..self.vertex_num, 0..1);
         }
 
         self.queue.submit(std::iter::once(encoder.finish()));

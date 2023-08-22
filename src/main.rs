@@ -13,7 +13,7 @@ async fn main() {
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
 
-    let object = object::Object::new();
+    let object = object::Square::new();
     let mut state = state::State::new(&window, object).await;
 
     event_loop.run(move |event, _, control_flow| match event {
