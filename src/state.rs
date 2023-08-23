@@ -1,4 +1,4 @@
-use crate::object::{GetVertices, Vertex};
+use crate::objects::{GetVertices, Vertex};
 use wgpu::util::DeviceExt;
 use winit::event::*;
 use winit::window::Window;
@@ -15,7 +15,7 @@ pub struct State {
 }
 
 impl State {
-    pub async fn new(window: &Window, scene: impl GetVertices) -> Self {
+    pub async fn new(window: &Window, scene: &impl GetVertices) -> Self {
         let size = window.inner_size();
         let instance = wgpu::Instance::new(wgpu::Backends::all());
         let surface = unsafe { instance.create_surface(window) };
