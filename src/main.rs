@@ -1,5 +1,5 @@
+mod gpu;
 mod objects;
-mod state;
 
 use winit::{
     event::*,
@@ -14,7 +14,7 @@ async fn main() {
     let window = WindowBuilder::new().build(&event_loop).unwrap();
 
     let object = objects::Square::new();
-    let mut state = state::State::new(&window, &object).await;
+    let mut state = gpu::State::new(&window, &object).await;
 
     event_loop.run(move |event, _, control_flow| match event {
         Event::RedrawRequested(window_id) if window_id == window.id() => match state.render() {
