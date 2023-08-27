@@ -1,4 +1,4 @@
-use super::{GetVertices, Vertex};
+use crate::gpu::{GetVertices, Vertex};
 
 pub struct Square<'a> {
     vertices: &'a [Vertex],

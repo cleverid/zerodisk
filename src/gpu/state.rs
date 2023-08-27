@@ -1,4 +1,4 @@
-use crate::objects::{GetVertices, Vertex};
+use super::{GetVertices, Vertex};
 use wgpu::util::DeviceExt;
 use winit::event::*;
 use winit::window::Window;
