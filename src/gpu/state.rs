@@ -12,6 +12,8 @@ pub struct State {
     render_pipeline: wgpu::RenderPipeline,
     vertex_num: u32,
     vertex_buffer: wgpu::Buffer,
+    uniform_buffer: wgpu::Buffer,
+    uniform_bind_group: wgpu::BindGroup,
 }
 
 impl State {
@@ -50,12 +52,42 @@ impl State {
         };
         surface.configure(&device, &config);
 
+        // uniform buffer
+        let viewport: &[f32; 2] = &[size.width as f32 / 2.0, size.height as f32 / 2.0];
+        let uniform_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Uniform Buffer"),
+            contents: bytemuck::cast_slice(viewport),
+            usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
+        });
+        let uniform_bind_group_layout =
+            device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
+                entries: &[wgpu::BindGroupLayoutEntry {
+                    binding: 0,
+                    visibility: wgpu::ShaderStages::VERTEX,
+                    ty: wgpu::BindingType::Buffer {
+                        ty: wgpu::BufferBindingType::Uniform,
+                        has_dynamic_offset: false,
+                        min_binding_size: None,
+                    },
+                    count: None,
+                }],
+                label: Some("Uniform Bind Group Layout"),
+            });
+        let uniform_bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
+            layout: &uniform_bind_group_layout,
+            entries: &[wgpu::BindGroupEntry {
+                binding: 0,
+                resource: uniform_buffer.as_entire_binding(),
+            }],
+            label: Some("Uniform Bind Group"),
+        });
+
         // shaders
         let shader = device.create_shader_module(wgpu::include_wgsl!("shader.wgsl"));
         let render_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("Render pipeline layout"),
-                bind_group_layouts: &[],
+                bind_group_layouts: &[&uniform_bind_group_layout],
                 push_constant_ranges: &[],
             });
         let render_pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
@@ -110,6 +142,8 @@ impl State {
             render_pipeline,
             vertex_num,
             vertex_buffer,
+            uniform_buffer,
+            uniform_bind_group,
         }
     }
 
@@ -119,6 +153,10 @@ impl State {
             self.config.width = new_size.width;
             self.config.height = new_size.height;
             self.surface.configure(&self.device, &self.config);
+            // update viewport
+            let viewport: &[f32; 2] = &[new_size.width as f32 / 2.0, new_size.height as f32 / 2.0];
+            self.queue
+                .write_buffer(&self.uniform_buffer, 0, bytemuck::cast_slice(viewport));
         }
     }
 
@@ -161,6 +199,7 @@ impl State {
             });
             render_pass.set_pipeline(&self.render_pipeline);
             render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
+            render_pass.set_bind_group(0, &self.uniform_bind_group, &[]);
             render_pass.draw(0..self.vertex_num, 0..1);
         }
 
