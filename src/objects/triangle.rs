@@ -1,5 +1,5 @@
 use super::{Color, Point};
-use crate::gpu::{GPUVertex, GetVertices};
+use crate::gpu::GetGPUData;
 
 pub struct Triangle<'a> {
     pivot: Point,
@@ -10,7 +10,7 @@ pub struct Triangle<'a> {
 impl Triangle<'_> {
     pub fn new() -> Self {
         Self {
-            pivot: Point { x: 10, y: 10 },
+            pivot: Point { x: 200, y: 200 },
             color: Color::new(1, 1, 0, 0),
             points: &[
                 Point { x: 50, y: 0 },
@@ -21,17 +21,14 @@ impl Triangle<'_> {
     }
 }
 
-impl GetVertices for Triangle<'_> {
-    fn get_vertices(&self) -> Vec<GPUVertex> {
-        let mut result: Vec<GPUVertex> = Vec::with_capacity(self.points.len());
-        for point in self.points {
-            let x = (self.pivot.x + point.x) as f32;
-            let y = (self.pivot.y + point.y) as f32;
-            result.push(GPUVertex {
-                position: [x, y, 1.0],
-                color: self.color.to_gpu(),
-            })
-        }
-        result
+impl GetGPUData for Triangle<'_> {
+    fn get_gpu_points(&self) -> Vec<[f32; 2]> {
+        self.points.to_vec().iter().map(|p| p.to_gpu()).collect()
+    }
+    fn get_gpu_pivot(&self) -> [f32; 2] {
+        self.pivot.to_gpu()
+    }
+    fn get_gpu_color(&self) -> [f32; 3] {
+        self.color.to_gpu()
     }
 }

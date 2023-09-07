@@ -1,5 +1,5 @@
 use super::{Color, Point};
-use crate::gpu::{GPUVertex, GetVertices};
+use crate::gpu::{GPUVertex, GetGPUData};
 
 pub struct Square<'a> {
     pivot: Point,
@@ -24,17 +24,14 @@ impl Square<'_> {
     }
 }
 
-impl GetVertices for Square<'_> {
-    fn get_vertices(&self) -> Vec<GPUVertex> {
-        let mut result: Vec<GPUVertex> = Vec::with_capacity(self.points.len());
-        for point in self.points {
-            let x = (self.pivot.x + point.x) as f32;
-            let y = (self.pivot.y + point.y) as f32;
-            result.push(GPUVertex {
-                position: [x, y, 1.0],
-                color: self.color.to_gpu(),
-            })
-        }
-        result
+impl GetGPUData for Square<'_> {
+    fn get_gpu_points(&self) -> Vec<[f32; 2]> {
+        self.points.to_vec().iter().map(|p| p.to_gpu()).collect()
+    }
+    fn get_gpu_pivot(&self) -> [f32; 2] {
+        self.pivot.to_gpu()
+    }
+    fn get_gpu_color(&self) -> [f32; 3] {
+        self.color.to_gpu()
     }
 }

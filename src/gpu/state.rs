@@ -1,4 +1,4 @@
-use super::{GPUVertex, GetVertices};
+use super::{GPUVertex, GetGPUData};
 use wgpu::util::DeviceExt;
 use winit::event::*;
 use winit::window::Window;
@@ -17,7 +17,7 @@ pub struct State {
 }
 
 impl State {
-    pub async fn new(window: &Window, scene: &impl GetVertices) -> Self {
+    pub async fn new(window: &Window, scene: &impl GetGPUData) -> Self {
         let size = window.inner_size();
         let instance = wgpu::Instance::new(wgpu::Backends::all());
         let surface = unsafe { instance.create_surface(window) };
@@ -125,7 +125,7 @@ impl State {
             multiview: None,
         });
 
-        let vertices = scene.get_vertices();
+        let vertices = scene.get_gpu_data();
         let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Vertex Buffer"),
             contents: bytemuck::cast_slice(vertices.as_slice()),
