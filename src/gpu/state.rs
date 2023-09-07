@@ -1,4 +1,4 @@
-use super::{GetVertices, Vertex};
+use super::{GPUVertex, GetVertices};
 use wgpu::util::DeviceExt;
 use winit::event::*;
 use winit::window::Window;
@@ -128,7 +128,7 @@ impl State {
         let vertices = scene.get_vertices();
         let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Vertex Buffer"),
-            contents: bytemuck::cast_slice(vertices),
+            contents: bytemuck::cast_slice(vertices.as_slice()),
             usage: wgpu::BufferUsages::VERTEX,
         });
         let vertex_num = vertices.len() as u32;
@@ -211,7 +211,7 @@ impl State {
 
 fn description<'a>() -> wgpu::VertexBufferLayout<'a> {
     wgpu::VertexBufferLayout {
-        array_stride: std::mem::size_of::<Vertex>() as wgpu::BufferAddress,
+        array_stride: std::mem::size_of::<GPUVertex>() as wgpu::BufferAddress,
         step_mode: wgpu::VertexStepMode::Vertex,
         attributes: &[
             wgpu::VertexAttribute {

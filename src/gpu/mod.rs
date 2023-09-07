@@ -1,5 +1,5 @@
 mod ports;
 mod state;
 
-pub use ports::{GetVertices, Vertex};
+pub use ports::{GPUVertex, GetVertices};
 pub use state::State;

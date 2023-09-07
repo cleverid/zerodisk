@@ -1,51 +1,40 @@
-use crate::gpu::{GetVertices, Vertex};
+use super::{Color, Point};
+use crate::gpu::{GPUVertex, GetVertices};
 
 pub struct Square<'a> {
-    vertices: &'a [Vertex],
+    pivot: Point,
+    color: Color,
+    points: &'a [Point],
 }
-
-struct Point {
-    x: f32,
-    y: f32,
-}
-
-const PIVOT: Point = Point { x: 10.0, y: 10.0 };
 
 impl Square<'_> {
     pub fn new() -> Self {
         Self {
-            vertices: &[
-                Vertex {
-                    position: [PIVOT.x + 100.0, PIVOT.y + 100.0, 0.0],
-                    color: [0.0, 1.0, 0.0],
-                },
-                Vertex {
-                    position: [PIVOT.x + 0.0, PIVOT.y + 0.0, 0.0],
-                    color: [0.0, 1.0, 0.0],
-                },
-                Vertex {
-                    position: [PIVOT.x + 0.0, PIVOT.y + 100.0, 0.0],
-                    color: [0.0, 1.0, 0.0],
-                },
-                Vertex {
-                    position: [PIVOT.x + 100.0, PIVOT.y + 100.0, 0.0],
-                    color: [0.0, 1.0, 0.0],
-                },
-                Vertex {
-                    position: [PIVOT.x + 100.0, PIVOT.y + 0.0, 0.0],
-                    color: [0.0, 1.0, 0.0],
-                },
-                Vertex {
-                    position: [PIVOT.x + 0.0, PIVOT.y + 0.0, 0.0],
-                    color: [0.0, 1.0, 0.0],
-                },
+            pivot: Point { x: 10, y: 10 },
+            color: Color::new(1, 0, 0, 1),
+            points: &[
+                Point { x: 100, y: 100 },
+                Point { x: 0, y: 0 },
+                Point { x: 0, y: 100 },
+                Point { x: 100, y: 100 },
+                Point { x: 100, y: 0 },
+                Point { x: 0, y: 0 },
             ],
         }
     }
 }
 
 impl GetVertices for Square<'_> {
-    fn get_vertices(&self) -> &[Vertex] {
-        self.vertices
+    fn get_vertices(&self) -> Vec<GPUVertex> {
+        let mut result: Vec<GPUVertex> = Vec::with_capacity(self.points.len());
+        for point in self.points {
+            let x = (self.pivot.x + point.x) as f32;
+            let y = (self.pivot.y + point.y) as f32;
+            result.push(GPUVertex {
+                position: [x, y, 1.0],
+                color: self.color.to_gpu(),
+            })
+        }
+        result
     }
 }
