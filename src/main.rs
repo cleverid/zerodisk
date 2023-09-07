@@ -13,8 +13,13 @@ async fn main() {
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
 
-    let object = objects::Square::new();
-    let mut state = gpu::State::new(&window, &object).await;
+    let square = objects::Square::new();
+    let triangle = objects::Triangle::new();
+    let mut scene = objects::Scene::new();
+    scene.add(&square);
+    scene.add(&triangle);
+
+    let mut state = gpu::State::new(&window, &scene).await;
 
     event_loop.run(move |event, _, control_flow| match event {
         Event::RedrawRequested(window_id) if window_id == window.id() => match state.render() {
