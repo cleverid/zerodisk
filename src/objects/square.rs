@@ -1,5 +1,5 @@
-use super::{Color, Point, to_gpu_data};
-use crate::gpu::{GetGPUData, GPUVertex};
+use super::{to_gpu_data, Color, Point};
+use crate::gpu::{GPUVertex, GetGPUData};
 
 pub struct Square<'a> {
     pivot: Point,

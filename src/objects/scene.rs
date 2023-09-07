@@ -1,4 +1,4 @@
-use crate::gpu::{GetGPUData, GPUVertex};
+use crate::gpu::{GPUVertex, GetGPUData};
 
 pub struct Scene<'a> {
     objects: Vec<&'a dyn GetGPUData>,
@@ -6,7 +6,9 @@ pub struct Scene<'a> {
 
 impl Scene<'_> {
     pub fn new() -> Self {
-        Scene { objects: Vec::new() }
+        Scene {
+            objects: Vec::new(),
+        }
     }
     pub fn add(&mut self, object: &dyn GetGPUData) -> &Self {
         self.objects.push(object);
