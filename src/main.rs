@@ -1,6 +1,9 @@
 mod gpu;
 mod objects;
+mod scene;
 
+use objects::{Square, TriangleBuilder};
+use scene::Scene;
 use winit::{
     event::*,
     event_loop::{ControlFlow, EventLoop},
@@ -13,11 +16,14 @@ async fn main() {
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
 
-    let square = objects::Square::new();
-    let triangle = objects::Triangle::new();
-    let mut scene = objects::Scene::new();
-    scene.add(&square);
-    scene.add(&triangle);
+    let o1 = TriangleBuilder::new()
+        .pivot(100, 100)
+        .color(0, 0, 1)
+        .build();
+    let o2 = TriangleBuilder::new().pivot(200, 200).build();
+    let o3 = Square::new();
+    let mut scene = Scene::new();
+    scene.add(o1).add(o2).add(o3);
 
     let mut state = gpu::State::new(&window, &scene).await;
 

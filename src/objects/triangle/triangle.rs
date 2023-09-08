@@ -1,5 +1,5 @@
-use super::{to_gpu_data, Color, Point};
 use crate::gpu::{GPUVertex, GetGPUData};
+use crate::objects::{to_gpu_data, Color, Point};
 
 pub struct Triangle<'a> {
     pivot: Point,
@@ -8,10 +8,10 @@ pub struct Triangle<'a> {
 }
 
 impl Triangle<'_> {
-    pub fn new() -> Self {
+    pub fn new(pivot: Point, color: Color) -> Self {
         Self {
-            pivot: Point { x: 200, y: 200 },
-            color: Color::new(1, 1, 0, 0),
+            pivot,
+            color,
             points: &[
                 Point { x: 50, y: 0 },
                 Point { x: 0, y: 100 },

@@ -1,22 +1,22 @@
 use crate::gpu::{GPUVertex, GetGPUData};
 
-pub struct Scene<'a> {
-    objects: Vec<&'a dyn GetGPUData>,
+pub struct Scene {
+    objects: Vec<Box<dyn GetGPUData>>,
 }
 
-impl Scene<'_> {
+impl Scene {
     pub fn new() -> Self {
         Scene {
             objects: Vec::new(),
         }
     }
-    pub fn add(&mut self, object: &dyn GetGPUData) -> &Self {
-        self.objects.push(object);
+    pub fn add(&mut self, object: impl GetGPUData + 'static) -> &mut Self {
+        self.objects.push(Box::new(object));
         self
     }
 }
 
-impl GetGPUData for Scene<'_> {
+impl GetGPUData for Scene {
     fn get_gpu_data(&self) -> Vec<GPUVertex> {
         let mut result: Vec<GPUVertex> = Vec::new();
         for obj in self.objects.iter() {

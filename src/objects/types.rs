@@ -10,6 +10,7 @@ impl Point {
     }
 }
 
+#[derive(Clone, Copy)]
 pub struct Color {
     pub r: u32,
     pub g: u32,
