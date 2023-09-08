@@ -1,5 +1,5 @@
 mod color;
 mod point;
 
-pub use color::Color;
+pub use color::*;
 pub use point::Point;

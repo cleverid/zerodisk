@@ -19,7 +19,7 @@ async fn main() {
 
     let o1 = TriangleBuilder::new()
         .pivot(100, 100)
-        .color(0, 0, 1)
+        .color(255, 255, 255)
         .build();
     let o2 = TriangleBuilder::new().pivot(200, 200).build();
     let o3 = Square::new();

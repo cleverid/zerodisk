@@ -1,4 +1,4 @@
-use crate::primitive::{Color, Point};
+use crate::primitive::{Color, ColorBuilder, Point};
 
 use super::Triangle;
 
@@ -19,19 +19,14 @@ impl TriangleBuilder {
         self.pivot = Some(Point { x, y });
         self
     }
-    pub fn color(&mut self, r: u32, g: u32, b: u32) -> &mut Self {
-        self.color = Some(Color { r, g, b, a: 1 });
+    pub fn color(&mut self, r: u8, g: u8, b: u8) -> &mut Self {
+        self.color = Some(ColorBuilder::new().rgb(r, g, b).build());
         self
     }
     pub fn build(self) -> Triangle<'static> {
         Triangle::new(
             self.pivot.unwrap_or(Point { x: 0, y: 0 }),
-            self.color.unwrap_or(Color {
-                r: 0,
-                g: 0,
-                b: 0,
-                a: 0,
-            }),
+            self.color.unwrap_or(ColorBuilder::new().build()),
         )
     }
 }
