@@ -1,4 +1,4 @@
-use crate::objects::{Color, Point};
+use crate::primitive::{Color, Point};
 
 use super::Triangle;
 

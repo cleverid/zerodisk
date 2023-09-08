@@ -1,5 +1,6 @@
 use crate::gpu::{GPUVertex, GetGPUData};
-use crate::objects::{to_gpu_data, Color, Point};
+use crate::objects::to_gpu_data;
+use crate::primitive::{Color, Point};
 
 pub struct Triangle<'a> {
     pivot: Point,

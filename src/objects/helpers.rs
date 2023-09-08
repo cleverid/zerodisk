@@ -1,5 +1,5 @@
-use super::{Color, Point};
 use crate::gpu::GPUVertex;
+use crate::primitive::{Color, Point};
 
 pub fn to_gpu_data(pivot: &Point, points: &[Point], color: &Color) -> Vec<GPUVertex> {
     let mut result: Vec<GPUVertex> = Vec::with_capacity(points.len());

@@ -1,5 +1,6 @@
 mod gpu;
 mod objects;
+mod primitive;
 mod scene;
 
 use objects::{Square, TriangleBuilder};
