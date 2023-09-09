@@ -15,12 +15,12 @@ impl TriangleBuilder {
             color: None,
         }
     }
-    pub fn pivot(&mut self, x: u32, y: u32) -> &mut Self {
-        self.pivot = Some(Point { x, y });
+    pub fn pivot(&mut self, point: Point) -> &mut Self {
+        self.pivot = Some(point);
         self
     }
-    pub fn color(&mut self, r: u8, g: u8, b: u8) -> &mut Self {
-        self.color = Some(ColorBuilder::new().rgb(r, g, b).build());
+    pub fn color(&mut self, color: Color) -> &mut Self {
+        self.color = Some(color);
         self
     }
     pub fn build(self) -> Triangle<'static> {

@@ -23,12 +23,29 @@ impl ColorBuilder {
         self.b = Some(b);
         self
     }
+    pub fn rgba(&mut self, r: u8, g: u8, b: u8, a: u8) -> &mut Self {
+        self.rgb(r, g, b);
+        self.alpha(a);
+        self
+    }
+    pub fn alpha(&mut self, a: u8) -> &mut Self {
+        self.a = Some(a);
+        self
+    }
     pub fn build(self) -> Color {
         Color {
             r: self.r.unwrap_or(0),
             g: self.r.unwrap_or(0),
             b: self.r.unwrap_or(0),
-            a: self.r.unwrap_or(0),
+            a: self.r.unwrap_or(255),
         }
     }
+}
+
+pub fn rgb(r: u8, g: u8, b: u8) -> Color {
+    ColorBuilder::new().rgb(r, g, b).build()
+}
+
+pub fn rgba(r: u8, g: u8, b: u8, a: u8) -> Color {
+    ColorBuilder::new().rgba(r, g, b, a).build()
 }

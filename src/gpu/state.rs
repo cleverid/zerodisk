@@ -1,6 +1,5 @@
 use super::{GPUVertex, GetGPUData};
 use wgpu::util::DeviceExt;
-use winit::event::*;
 use winit::window::Window;
 
 pub struct State {
@@ -158,14 +157,6 @@ impl State {
             self.queue
                 .write_buffer(&self.uniform_buffer, 0, bytemuck::cast_slice(viewport));
         }
-    }
-
-    pub fn input(&mut self, event: &WindowEvent) -> bool {
-        todo!()
-    }
-
-    pub fn update(&mut self) {
-        todo!()
     }
 
     pub fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
