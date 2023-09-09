@@ -35,9 +35,9 @@ impl ColorBuilder {
     pub fn build(self) -> Color {
         Color {
             r: self.r.unwrap_or(0),
-            g: self.r.unwrap_or(0),
-            b: self.r.unwrap_or(0),
-            a: self.r.unwrap_or(255),
+            g: self.g.unwrap_or(0),
+            b: self.b.unwrap_or(0),
+            a: self.a.unwrap_or(255),
         }
     }
 }

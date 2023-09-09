@@ -1,6 +1,7 @@
 use super::square::Square;
 use crate::primitive::{point, Color, ColorBuilder, Point};
 
+#[derive(Clone, Copy)]
 pub struct SquareBuilder {
     position: Option<Point>,
     color: Option<Color>,

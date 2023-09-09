@@ -20,10 +20,16 @@ async fn main() {
 
     let o1 = TriangleBuilder::new()
         .position(point(100, 100))
+        .color(rgb(0, 0, 255))
+        .build();
+    let o2 = TriangleBuilder::new()
+        .position(point(200, 200))
+        .color(rgb(255, 0, 0))
+        .build();
+    let o3 = SquareBuilder::new()
+        .position(point(10, 10))
         .color(rgb(255, 255, 255))
         .build();
-    let o2 = TriangleBuilder::new().position(point(200, 200)).build();
-    let o3 = SquareBuilder::new().build();
     let mut scene = Scene::new();
     scene.add(o1).add(o2).add(o3);
 
