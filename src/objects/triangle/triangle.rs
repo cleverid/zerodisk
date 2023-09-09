@@ -3,15 +3,15 @@ use crate::objects::to_gpu_data;
 use crate::primitive::{Color, Point};
 
 pub struct Triangle<'a> {
-    pivot: Point,
+    position: Point,
     color: Color,
     points: &'a [Point],
 }
 
 impl Triangle<'_> {
-    pub fn new(pivot: Point, color: Color) -> Self {
+    pub fn new(position: Point, color: Color) -> Self {
         Self {
-            pivot,
+            position,
             color,
             points: &[
                 Point { x: 50, y: 0 },
@@ -24,6 +24,6 @@ impl Triangle<'_> {
 
 impl GetGPUData for Triangle<'_> {
     fn get_gpu_data(&self) -> Vec<GPUVertex> {
-        to_gpu_data(&self.pivot, self.points, &self.color)
+        to_gpu_data(&self.position, self.points, &self.color)
     }
 }

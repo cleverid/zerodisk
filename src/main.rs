@@ -3,7 +3,7 @@ mod objects;
 mod primitive;
 mod scene;
 
-use objects::{Square, TriangleBuilder};
+use objects::{SquareBuilder, TriangleBuilder};
 use primitive::{point, rgb};
 use scene::Scene;
 use winit::{
@@ -19,11 +19,11 @@ async fn main() {
     let window = WindowBuilder::new().build(&event_loop).unwrap();
 
     let o1 = TriangleBuilder::new()
-        .pivot(point(100, 100))
+        .position(point(100, 100))
         .color(rgb(255, 255, 255))
         .build();
-    let o2 = TriangleBuilder::new().pivot(point(200, 200)).build();
-    let o3 = Square::new();
+    let o2 = TriangleBuilder::new().position(point(200, 200)).build();
+    let o3 = SquareBuilder::new().build();
     let mut scene = Scene::new();
     scene.add(o1).add(o2).add(o3);
 

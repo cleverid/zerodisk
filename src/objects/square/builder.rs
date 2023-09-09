@@ -1,13 +1,12 @@
-use super::triangle::Triangle;
+use super::square::Square;
 use crate::primitive::{point, Color, ColorBuilder, Point};
 
-#[derive(Clone, Copy)]
-pub struct TriangleBuilder {
+pub struct SquareBuilder {
     position: Option<Point>,
     color: Option<Color>,
 }
 
-impl TriangleBuilder {
+impl SquareBuilder {
     pub fn new() -> Self {
         Self {
             position: None,
@@ -22,8 +21,8 @@ impl TriangleBuilder {
         self.color = Some(color);
         self
     }
-    pub fn build(self) -> Triangle<'static> {
-        Triangle::new(
+    pub fn build(self) -> Square<'static> {
+        Square::new(
             self.position.unwrap_or(point(0, 0)),
             self.color.unwrap_or(ColorBuilder::new().build()),
         )
