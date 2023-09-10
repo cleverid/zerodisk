@@ -22,7 +22,7 @@ impl TriangleBuilder {
         self.color = Some(color);
         self
     }
-    pub fn build(self) -> Triangle<'static> {
+    pub fn build(self) -> Triangle {
         Triangle::new(
             self.position.unwrap_or(point(0, 0)),
             self.color.unwrap_or(ColorBuilder::new().build()),

@@ -1,29 +1,25 @@
 use crate::gpu::{GPUVertex, GetGPUData};
 use crate::objects::to_gpu_data;
-use crate::primitive::{Color, Point};
+use crate::primitive::{triangle, Color, Point, Triangle as TriangleMesh};
 
-pub struct Triangle<'a> {
+pub struct Triangle {
     position: Point,
     color: Color,
-    points: &'a [Point],
+    mesh: Vec<TriangleMesh>,
 }
 
-impl Triangle<'_> {
+impl Triangle {
     pub fn new(position: Point, color: Color) -> Self {
         Self {
             position,
             color,
-            points: &[
-                Point { x: 50, y: 0 },
-                Point { x: 0, y: 100 },
-                Point { x: 100, y: 100 },
-            ],
+            mesh: vec![triangle([[50, 0], [0, 100], [100, 100]])],
         }
     }
 }
 
-impl GetGPUData for Triangle<'_> {
+impl GetGPUData for Triangle {
     fn get_gpu_data(&self) -> Vec<GPUVertex> {
-        to_gpu_data(&self.position, self.points, &self.color)
+        to_gpu_data(&self.position, &self.mesh, &self.color)
     }
 }

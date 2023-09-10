@@ -22,7 +22,7 @@ impl SquareBuilder {
         self.color = Some(color);
         self
     }
-    pub fn build(self) -> Square<'static> {
+    pub fn build(self) -> Square {
         Square::new(
             self.position.unwrap_or(point(0, 0)),
             self.color.unwrap_or(ColorBuilder::new().build()),
