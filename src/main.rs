@@ -30,6 +30,7 @@ async fn main() {
         .position(point(10, 10))
         .color(rgb(255, 255, 255))
         .build();
+
     let mut scene = Scene::new();
     scene.add(o1).add(o2).add(o3);
 
