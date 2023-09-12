@@ -10,7 +10,7 @@ impl Scene {
             objects: Vec::new(),
         }
     }
-    pub fn add(&mut self, object: impl GetGPUData + 'static) -> &mut Self {
+    pub fn add(mut self, object: impl GetGPUData + 'static) -> Self {
         self.objects.push(Box::new(object));
         self
     }

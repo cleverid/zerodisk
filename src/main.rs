@@ -19,23 +19,7 @@ async fn main() {
     env_logger::init();
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
-
-    let o1 = Object::new(TriangleMesh::new(100))
-        .position(point(150, 150))
-        .color(rgb(0, 0, 255))
-        .build();
-    let o2 = Object::new(TriangleMesh::new(100))
-        .position(point(250, 250))
-        .color(rgb(255, 0, 0))
-        .build();
-    let o3 = Object::new(SquareMesh::new(100))
-        .position(point(60, 60))
-        .color(rgb(255, 255, 255))
-        .build();
-
-    let mut scene = Scene::new();
-    scene.add(o1).add(o2).add(o3);
-
+    let scene = make_scene();
     let mut state = gpu::State::new(&window, &scene).await;
 
     event_loop.run(move |event, _, control_flow| match event {
@@ -81,4 +65,21 @@ async fn main() {
         }
         _ => (),
     });
+}
+
+fn make_scene() -> Scene {
+    let o1 = Object::new(TriangleMesh::new(100))
+        .position(point(150, 150))
+        .color(rgb(0, 0, 255))
+        .build();
+    let o2 = Object::new(TriangleMesh::new(100))
+        .position(point(250, 250))
+        .color(rgb(255, 0, 0))
+        .build();
+    let o3 = Object::new(SquareMesh::new(100))
+        .position(point(60, 60))
+        .color(rgb(255, 255, 255))
+        .build();
+
+    Scene::new().add(o1).add(o2).add(o3)
 }
