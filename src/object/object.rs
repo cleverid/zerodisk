@@ -1,20 +1,19 @@
 use crate::gpu::{GPUVertex, GetGPUData};
-use crate::primitive::{Color, Point, Triangle};
+use crate::meshes::GetMesh;
+use crate::primitive::{Color, Mesh, Point};
+
+use super::ObjectBuilder;
 
 #[derive(Clone)]
 pub struct Object {
     pub position: Point,
     pub color: Color,
-    pub mesh: Vec<Triangle>,
+    pub mesh: Mesh,
 }
 
 impl Object {
-    pub fn new(position: Point, color: Color, mesh: Vec<Triangle>) -> Self {
-        Self {
-            position,
-            color,
-            mesh,
-        }
+    pub fn new(mesh: impl GetMesh) -> ObjectBuilder {
+        ObjectBuilder::new(mesh.get_mesh_data())
     }
 }
 
@@ -33,23 +32,5 @@ impl GetGPUData for Object {
             }
         }
         result
-    }
-}
-
-pub trait Objective {
-    fn get_object(&mut self) -> &mut Object;
-    fn position(&mut self, position: Point) -> &mut Self {
-        self.get_object().position = position;
-        self
-    }
-    fn color(&mut self, color: Color) -> &mut Self {
-        self.get_object().color = color;
-        self
-    }
-}
-
-impl Objective for Object {
-    fn get_object(&mut self) -> &mut Object {
-        self
     }
 }

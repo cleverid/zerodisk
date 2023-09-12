@@ -1,9 +1,11 @@
 mod gpu;
-mod objects;
+mod meshes;
+mod object;
 mod primitive;
 mod scene;
 
-use objects::{SquareBuilder, TriangleBuilder};
+use meshes::{SquareMesh, TriangleMesh};
+use object::Object;
 use primitive::{point, rgb};
 use scene::Scene;
 use winit::{
@@ -18,16 +20,16 @@ async fn main() {
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
 
-    let o1 = TriangleBuilder::new()
-        .position(point(100, 100))
+    let o1 = Object::new(TriangleMesh::new(100))
+        .position(point(150, 150))
         .color(rgb(0, 0, 255))
         .build();
-    let o2 = TriangleBuilder::new()
-        .position(point(200, 200))
+    let o2 = Object::new(TriangleMesh::new(100))
+        .position(point(250, 250))
         .color(rgb(255, 0, 0))
         .build();
-    let o3 = SquareBuilder::new()
-        .position(point(10, 10))
+    let o3 = Object::new(SquareMesh::new(100))
+        .position(point(60, 60))
         .color(rgb(255, 255, 255))
         .build();
 
