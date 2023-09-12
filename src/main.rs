@@ -57,6 +57,9 @@ async fn main() {
                 return;
             }
             match event {
+                WindowEvent::CursorMoved { position, .. } => {
+                    println!("x:{}, y:{}", position.x, position.y)
+                }
                 WindowEvent::Resized(physical_size) => {
                     println!("resized");
                     state.resize(*physical_size);
