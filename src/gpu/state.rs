@@ -3,11 +3,11 @@ use wgpu::util::DeviceExt;
 use winit::window::Window;
 
 pub struct State {
+    pub size: winit::dpi::PhysicalSize<u32>,
     surface: wgpu::Surface,
     device: wgpu::Device,
     queue: wgpu::Queue,
     config: wgpu::SurfaceConfiguration,
-    pub size: winit::dpi::PhysicalSize<u32>,
     render_pipeline: wgpu::RenderPipeline,
     vertex_num: u32,
     vertex_buffer: wgpu::Buffer,

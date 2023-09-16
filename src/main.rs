@@ -19,7 +19,7 @@ async fn main() {
     env_logger::init();
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
-    let scene = make_scene();
+    let mut scene = make_scene();
     let mut state = gpu::State::new(&window, &scene).await;
 
     event_loop.run(move |event, _, control_flow| match event {
@@ -42,7 +42,7 @@ async fn main() {
             }
             match event {
                 WindowEvent::CursorMoved { position, .. } => {
-                    println!("x:{}, y:{}", position.x, position.y)
+                    scene.trace(point(position.x as i32, position.y as i32));
                 }
                 WindowEvent::Resized(physical_size) => {
                     println!("resized");
@@ -81,5 +81,10 @@ fn make_scene() -> Scene {
         .color(rgb(255, 255, 255))
         .build();
 
-    Scene::new().add(o1).add(o2).add(o3)
+    let scene = Scene::new()
+        .add(o1)
+        .add(o2)
+        .add(o3)
+        .handle_trace(|objects| print!("{:?}", objects));
+    scene
 }

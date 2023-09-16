@@ -1,17 +1,36 @@
-use crate::gpu::{GPUVertex, GetGPUData};
+use crate::{
+    gpu::{GPUVertex, GetGPUData},
+    object::Object,
+    primitive::Point,
+};
 
+#[derive(Clone, Debug)]
 pub struct Scene {
-    objects: Vec<Box<dyn GetGPUData>>,
+    objects: Vec<Object>,
+    handle_callback: Vec<Box<fn(objects: &Vec<Object>)>>,
 }
 
 impl Scene {
     pub fn new() -> Self {
         Scene {
             objects: Vec::new(),
+            handle_callback: Vec::new(),
         }
     }
-    pub fn add(mut self, object: impl GetGPUData + 'static) -> Self {
-        self.objects.push(Box::new(object));
+
+    pub fn add(mut self, object: Object) -> Self {
+        self.objects.push(object);
+        self
+    }
+
+    pub fn trace(&mut self, point: Point) {
+        for cb in self.handle_callback.iter() {
+            cb(&self.objects)
+        }
+    }
+
+    pub fn handle_trace(mut self, callback: fn(objects: &Vec<Object>)) -> Self {
+        self.handle_callback.push(Box::new(callback));
         self
     }
 }

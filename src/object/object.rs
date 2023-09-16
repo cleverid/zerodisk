@@ -4,7 +4,7 @@ use crate::primitive::{Color, Mesh, Point};
 
 use super::ObjectBuilder;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Object {
     pub position: Point,
     pub color: Color,
