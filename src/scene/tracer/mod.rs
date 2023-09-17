@@ -1,5 +1,4 @@
-mod scene;
 mod tracer;
+mod triangle_area;
 
-pub use scene::Scene;
 pub use tracer::Tracer;

@@ -8,7 +8,7 @@ impl Tracer {
         Tracer {}
     }
 
-    // Вызывается результат трассировки из ID элементов
+    /// Вызывается результат трассировки из ID элементов
     pub fn trace(&self, _point: Point) -> Vec<String> {
         Vec::new()
     }
