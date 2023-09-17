@@ -42,7 +42,12 @@ async fn main() {
             }
             match event {
                 WindowEvent::CursorMoved { position, .. } => {
-                    scene.trace(point(position.x as i32, position.y as i32));
+                    let trace_point = point(position.x as i32, position.y as i32);
+                    let ids = scene.tracer.trace(trace_point);
+                    let changed = scene.mark_traced(ids);
+                    if changed {
+                        state.scene_update(&scene);
+                    }
                 }
                 WindowEvent::Resized(physical_size) => {
                     println!("resized");
@@ -81,10 +86,5 @@ fn make_scene() -> Scene {
         .color(rgb(255, 255, 255))
         .build();
 
-    let scene = Scene::new()
-        .add(o1)
-        .add(o2)
-        .add(o3)
-        .handle_trace(|objects| print!("{:?}", objects));
-    scene
+    Scene::new().add(o1).add(o2).add(o3)
 }

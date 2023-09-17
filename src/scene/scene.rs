@@ -1,20 +1,21 @@
 use crate::{
     gpu::{GPUVertex, GetGPUData},
     object::Object,
-    primitive::Point,
 };
+
+use super::tracer::Tracer;
 
 #[derive(Clone, Debug)]
 pub struct Scene {
+    pub tracer: Tracer,
     objects: Vec<Object>,
-    handle_callback: Vec<Box<fn(objects: &Vec<Object>)>>,
 }
 
 impl Scene {
     pub fn new() -> Self {
         Scene {
             objects: Vec::new(),
-            handle_callback: Vec::new(),
+            tracer: Tracer::new(),
         }
     }
 
@@ -23,15 +24,8 @@ impl Scene {
         self
     }
 
-    pub fn trace(&mut self, point: Point) {
-        for cb in self.handle_callback.iter() {
-            cb(&self.objects)
-        }
-    }
-
-    pub fn handle_trace(mut self, callback: fn(objects: &Vec<Object>)) -> Self {
-        self.handle_callback.push(Box::new(callback));
-        self
+    pub fn mark_traced(&mut self, _traced_ids: Vec<String>) -> bool {
+        false
     }
 }
 

@@ -159,6 +159,8 @@ impl State {
         }
     }
 
+    pub fn scene_update(&mut self, _scene: &impl GetGPUData) {}
+
     pub fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
         let output = self.surface.get_current_texture()?;
         let view = output
