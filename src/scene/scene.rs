@@ -20,12 +20,26 @@ impl Scene {
     }
 
     pub fn add(mut self, object: Object) -> Self {
-        self.objects.push(object);
+        self.objects.push(object.clone());
+        self.tracer.index(object.id.clone(), object.get_mesh());
         self
     }
 
-    pub fn mark_traced(&mut self, _traced_ids: Vec<String>) -> bool {
-        false
+    pub fn mark_traced(&mut self, traced_ids: Vec<String>) -> bool {
+        let mut changed = false;
+        for object in self.objects.iter_mut() {
+            let mut off = false;
+            let mut on = false;
+            if traced_ids.contains(&object.id) {
+                on = object.set_highlighted(true);
+            } else {
+                off = object.set_highlighted(false);
+            }
+            if off || on {
+                changed = true;
+            }
+        }
+        changed
     }
 }
 

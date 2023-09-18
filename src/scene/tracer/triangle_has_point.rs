@@ -16,7 +16,7 @@ pub fn triangle_has_point(triangle: Triangle, point: Point) -> bool {
         points: [p1, p3, point],
     });
 
-    area_1_2 + area_2_3 + area_1_3 - area <= 0.001
+    area_1_2 + area_2_3 + area_1_3 - area <= 0.00001
 }
 
 #[cfg(test)]

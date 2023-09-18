@@ -128,7 +128,7 @@ impl State {
         let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Vertex Buffer"),
             contents: bytemuck::cast_slice(vertices.as_slice()),
-            usage: wgpu::BufferUsages::VERTEX,
+            usage: wgpu::BufferUsages::VERTEX | wgpu::BufferUsages::COPY_DST,
         });
         let vertex_num = vertices.len() as u32;
 
@@ -159,7 +159,11 @@ impl State {
         }
     }
 
-    pub fn scene_update(&mut self, _scene: &impl GetGPUData) {}
+    pub fn scene_update(&mut self, scene: &impl GetGPUData) {
+        let vertices = scene.get_gpu_data();
+        let data = bytemuck::cast_slice(vertices.as_slice());
+        self.queue.write_buffer(&self.vertex_buffer, 0, data);
+    }
 
     pub fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
         let output = self.surface.get_current_texture()?;

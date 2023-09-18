@@ -3,6 +3,7 @@ mod meshes;
 mod object;
 mod primitive;
 mod scene;
+mod uniq_id;
 
 use meshes::{SquareMesh, TriangleMesh};
 use object::Object;
@@ -73,17 +74,18 @@ async fn main() {
 }
 
 fn make_scene() -> Scene {
+    let max = 150;
     let o1 = Object::new(TriangleMesh::new(100))
         .position(point(150, 150))
-        .color(rgb(0, 0, 255))
+        .color(rgb(0, 0, max))
         .build();
     let o2 = Object::new(TriangleMesh::new(100))
         .position(point(250, 250))
-        .color(rgb(255, 0, 0))
+        .color(rgb(max, 0, 0))
         .build();
     let o3 = Object::new(SquareMesh::new(100))
         .position(point(60, 60))
-        .color(rgb(255, 255, 255))
+        .color(rgb(max, max, max))
         .build();
 
     Scene::new().add(o1).add(o2).add(o3)
