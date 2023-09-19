@@ -1,3 +1,5 @@
+use winit::dpi::PhysicalPosition;
+
 #[derive(Clone, Copy, Debug)]
 pub struct Point {
     pub x: i32,
@@ -19,5 +21,14 @@ impl Point {
 impl Default for Point {
     fn default() -> Self {
         Point { x: 0, y: 0 }
+    }
+}
+
+impl From<PhysicalPosition<f64>> for Point {
+    fn from(position: PhysicalPosition<f64>) -> Self {
+        Self {
+            x: position.x as i32,
+            y: position.y as i32,
+        }
     }
 }
