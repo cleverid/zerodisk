@@ -25,10 +25,10 @@ impl Default for Point {
 }
 
 impl From<PhysicalPosition<f64>> for Point {
-    fn from(item: PhysicalPosition<f64>) -> Point {
-        Point {
-            x: item.x as i32,
-            y: item.y as i32,
+    fn from(position: PhysicalPosition<f64>) -> Self {
+        Self {
+            x: position.x as i32,
+            y: position.y as i32,
         }
     }
 }
