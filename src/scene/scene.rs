@@ -32,7 +32,7 @@ impl Scene {
 
     pub fn trace(&mut self, trace_point: Point) -> bool {
         let traced = HashSet::from_iter(self.tracer.trace(trace_point));
-        let changed = traced == self.traced;
+        let changed = traced != self.traced;
         if changed {
             let traced_off = self.traced.difference(&traced).map(|i| i.clone()).collect();
             let traced_on = traced.difference(&self.traced).map(|i| i.clone()).collect();
