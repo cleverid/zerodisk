@@ -1,6 +1,9 @@
+use std::collections::HashSet;
+
 use crate::{
     gpu::{GPUVertex, GetGPUData},
     object::Object,
+    primitive::Point,
 };
 
 use super::tracer::Tracer;
@@ -9,6 +12,7 @@ use super::tracer::Tracer;
 pub struct Scene {
     pub tracer: Tracer,
     objects: Vec<Object>,
+    traced: HashSet<String>,
 }
 
 impl Scene {
@@ -16,6 +20,7 @@ impl Scene {
         Scene {
             objects: Vec::new(),
             tracer: Tracer::new(),
+            traced: HashSet::new(),
         }
     }
 
@@ -25,21 +30,27 @@ impl Scene {
         self
     }
 
-    pub fn mark_traced(&mut self, traced_ids: Vec<String>) -> bool {
-        let mut changed = false;
-        for object in self.objects.iter_mut() {
-            let mut off = false;
-            let mut on = false;
-            if traced_ids.contains(&object.id) {
-                on = object.set_highlighted(true);
-            } else {
-                off = object.set_highlighted(false);
-            }
-            if off || on {
-                changed = true;
-            }
+    pub fn trace(&mut self, trace_point: Point) -> bool {
+        let traced = HashSet::from_iter(self.tracer.trace(trace_point));
+        let changed = traced == self.traced;
+        if changed {
+            let traced_off = self.traced.difference(&traced).map(|i| i.clone()).collect();
+            let traced_on = traced.difference(&self.traced).map(|i| i.clone()).collect();
+            self.mark_traced(&traced_off, false);
+            self.mark_traced(&traced_on, true);
+            self.traced = traced;
         }
         changed
+    }
+
+    // fn get_object_by_id(&self) -> Option<Object> {
+    //     return
+    // }
+
+    fn mark_traced(&mut self, traced_ids: &HashSet<String>, status: bool) {
+        for id in traced_ids.iter() {
+            println!("{:?} {:?}", id, status);
+        }
     }
 }
 

@@ -43,9 +43,7 @@ async fn main() {
             }
             match event {
                 WindowEvent::CursorMoved { position, .. } => {
-                    let trace_point = point(position.x as i32, position.y as i32);
-                    let ids = scene.tracer.trace(trace_point);
-                    let changed = scene.mark_traced(ids);
+                    let changed = scene.trace((*position).into());
                     if changed {
                         state.scene_update(&scene);
                     }
