@@ -47,10 +47,7 @@ async fn main() {
                         return;
                     }
                     let pressed = matches!(state, ElementState::Pressed);
-                    let changed = scene.set_mouse_click_left(pressed);
-                    if changed {
-                        gpu_state.scene_update(&scene);
-                    }
+                    scene.set_mouse_click_left(pressed);
                 }
                 WindowEvent::CursorMoved { position, .. } => {
                     let changed = scene.set_mouse_position((*position).into());

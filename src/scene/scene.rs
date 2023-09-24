@@ -13,6 +13,7 @@ pub struct Scene {
     pub tracer: Tracer,
     objects: HashMap<String, Object>,
     traced: HashSet<String>,
+    dragged: HashSet<String>,
     mouse_cursor: Point,
 }
 
@@ -22,6 +23,7 @@ impl Scene {
             objects: HashMap::new(),
             tracer: Tracer::new(),
             traced: HashSet::new(),
+            dragged: HashSet::new(),
             mouse_cursor: point(0, 0),
         }
     }
@@ -32,14 +34,19 @@ impl Scene {
         self
     }
 
-    pub fn set_mouse_click_left(&mut self, clicked: bool) -> bool {
-        println!("clicked {:?} {:?}", clicked, self.mouse_cursor);
-        false
+    pub fn set_mouse_click_left(&mut self, clicked: bool) {
+        if clicked {
+            self.dragged = self.traced.clone();
+        } else {
+            self.dragged = HashSet::new();
+        }
     }
 
     pub fn set_mouse_position(&mut self, point: Point) -> bool {
-        self.mouse_cursor = point.clone();
-        self.trace(point)
+        let change_trace = self.trace(point.clone());
+        let change_drag = self.drag(point.clone());
+        self.mouse_cursor = point;
+        change_trace || change_drag
     }
 
     fn trace(&mut self, trace_point: Point) -> bool {
@@ -51,6 +58,16 @@ impl Scene {
             self.mark_traced(&traced_off, false);
             self.mark_traced(&traced_on, true);
             self.traced = traced;
+        }
+        changed
+    }
+
+    fn drag(&mut self, trace_point: Point) -> bool {
+        let drag = self.mouse_cursor - trace_point;
+        let mut changed = false;
+        if !drag.is_zero() && self.dragged.len() > 0 {
+            println!("drag {:?}", drag);
+            changed = true;
         }
         changed
     }

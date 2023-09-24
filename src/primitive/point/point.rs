@@ -17,6 +17,10 @@ impl Point {
         let y = pivot.y + self.y;
         return Point { x, y };
     }
+
+    pub fn is_zero(&self) -> bool {
+        self.x == 0 && self.y == 0
+    }
 }
 
 impl Default for Point {
@@ -71,5 +75,16 @@ mod tests {
         let p1 = Point { x: 2, y: 2 };
         let p2 = Point { x: 1, y: 1 };
         assert_eq!(p1 - p2, Point { x: 1, y: 1 })
+    }
+
+    #[test]
+    fn is_zero() {
+        let p1 = Point { x: 0, y: 0 };
+        let p2 = Point { x: 0, y: 1 };
+        let p3 = Point { x: 1, y: 1 };
+
+        assert_eq!(p1.is_zero(), true);
+        assert_eq!(p2.is_zero(), false);
+        assert_eq!(p3.is_zero(), false);
     }
 }
