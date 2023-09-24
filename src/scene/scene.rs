@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use crate::{
     gpu::{GPUVertex, GetGPUData},
     object::Object,
-    primitive::Point,
+    primitive::{point, Point},
 };
 
 use super::tracer::Tracer;
@@ -13,6 +13,7 @@ pub struct Scene {
     pub tracer: Tracer,
     objects: HashMap<String, Object>,
     traced: HashSet<String>,
+    mouse_cursor: Point,
 }
 
 impl Scene {
@@ -21,6 +22,7 @@ impl Scene {
             objects: HashMap::new(),
             tracer: Tracer::new(),
             traced: HashSet::new(),
+            mouse_cursor: point(0, 0),
         }
     }
 
@@ -30,7 +32,17 @@ impl Scene {
         self
     }
 
-    pub fn trace(&mut self, trace_point: Point) -> bool {
+    pub fn set_mouse_click_left(&mut self, clicked: bool) -> bool {
+        println!("clicked {:?} {:?}", clicked, self.mouse_cursor);
+        false
+    }
+
+    pub fn set_mouse_position(&mut self, point: Point) -> bool {
+        self.mouse_cursor = point.clone();
+        self.trace(point)
+    }
+
+    fn trace(&mut self, trace_point: Point) -> bool {
         let traced = HashSet::from_iter(self.tracer.trace(trace_point));
         let changed = traced != self.traced;
         if changed {

@@ -21,12 +21,12 @@ async fn main() {
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
     let mut scene = make_scene();
-    let mut state = gpu::State::new(&window, &scene).await;
+    let mut gpu_state = gpu::State::new(&window, &scene).await;
 
     event_loop.run(move |event, _, control_flow| match event {
-        Event::RedrawRequested(window_id) if window_id == window.id() => match state.render() {
+        Event::RedrawRequested(window_id) if window_id == window.id() => match gpu_state.render() {
             Ok(_) => {}
-            Err(wgpu::SurfaceError::Lost) => state.resize(state.size),
+            Err(wgpu::SurfaceError::Lost) => gpu_state.resize(gpu_state.size),
             Err(wgpu::SurfaceError::OutOfMemory) => *control_flow = ControlFlow::Exit,
             Err(e) => eprintln!("{:?}", e),
         },
@@ -42,15 +42,25 @@ async fn main() {
                 return;
             }
             match event {
-                WindowEvent::CursorMoved { position, .. } => {
-                    let changed = scene.trace((*position).into());
+                WindowEvent::MouseInput { button, state, .. } => {
+                    if !matches!(button, MouseButton::Left) {
+                        return;
+                    }
+                    let pressed = matches!(state, ElementState::Pressed);
+                    let changed = scene.set_mouse_click_left(pressed);
                     if changed {
-                        state.scene_update(&scene);
+                        gpu_state.scene_update(&scene);
+                    }
+                }
+                WindowEvent::CursorMoved { position, .. } => {
+                    let changed = scene.set_mouse_position((*position).into());
+                    if changed {
+                        gpu_state.scene_update(&scene);
                     }
                 }
                 WindowEvent::Resized(physical_size) => {
                     println!("resized");
-                    state.resize(*physical_size);
+                    gpu_state.resize(*physical_size);
                 }
                 WindowEvent::Moved(_) => {
                     println!("moved");
@@ -58,7 +68,7 @@ async fn main() {
                 }
                 WindowEvent::ScaleFactorChanged { new_inner_size, .. } => {
                     println!("scaled");
-                    state.resize(**new_inner_size);
+                    gpu_state.resize(**new_inner_size);
                 }
                 WindowEvent::CloseRequested => {
                     println!("Close by button");
