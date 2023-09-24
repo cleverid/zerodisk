@@ -1,6 +1,7 @@
+use std::ops::{Add, Sub};
 use winit::dpi::PhysicalPosition;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Point {
     pub x: i32,
     pub y: i32,
@@ -30,5 +31,45 @@ impl From<PhysicalPosition<f64>> for Point {
             x: position.x as i32,
             y: position.y as i32,
         }
+    }
+}
+
+impl Add for Point {
+    type Output = Self;
+
+    fn add(self, other: Self) -> Self {
+        Self {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+impl Sub for Point {
+    type Output = Self;
+
+    fn sub(self, other: Self) -> Self {
+        Self {
+            x: self.x - other.x,
+            y: self.y - other.y,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_add() {
+        let p1 = Point { x: 1, y: 1 };
+        let p2 = Point { x: 1, y: 1 };
+        assert_eq!(p1 + p2, Point { x: 2, y: 2 })
+    }
+
+    #[test]
+    fn test_substract() {
+        let p1 = Point { x: 2, y: 2 };
+        let p2 = Point { x: 1, y: 1 };
+        assert_eq!(p1 - p2, Point { x: 1, y: 1 })
     }
 }
