@@ -43,6 +43,10 @@ impl Object {
             true
         }
     }
+
+    pub fn move_object(&mut self, moved: Point) {
+        self.position = self.position + moved;
+    }
 }
 
 impl GetGPUData for Object {

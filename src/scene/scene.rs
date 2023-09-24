@@ -63,22 +63,30 @@ impl Scene {
     }
 
     fn drag(&mut self, trace_point: Point) -> bool {
-        let drag = self.mouse_cursor - trace_point;
+        let drag = trace_point - self.mouse_cursor;
         let mut changed = false;
         if !drag.is_zero() && self.dragged.len() > 0 {
-            println!("drag {:?}", drag);
             changed = true;
+            for id in self.dragged.clone().iter() {
+                self.get_object_mut(id).unwrap().move_object(drag.clone());
+                let object = self.get_object(id).unwrap();
+                self.tracer.index(id.clone(), object.get_mesh());
+            }
         }
         changed
     }
 
-    fn get_object_by_id(&mut self, object_id: &String) -> Option<&mut Object> {
+    fn get_object(&self, object_id: &String) -> Option<&Object> {
+        self.objects.get(object_id)
+    }
+
+    fn get_object_mut(&mut self, object_id: &String) -> Option<&mut Object> {
         self.objects.get_mut(object_id)
     }
 
     fn mark_traced(&mut self, traced_ids: &HashSet<String>, status: bool) {
         for id in traced_ids.iter() {
-            self.get_object_by_id(id).unwrap().set_highlighted(status);
+            self.get_object_mut(id).unwrap().set_highlighted(status);
         }
     }
 }
