@@ -7,10 +7,17 @@ use super::ObjectBuilder;
 
 #[derive(Clone, Debug)]
 pub struct Object {
+    /// Уникальный ID объекта
     pub id: UniqId,
+    /// Позиция объекта по x, y
     pub position: Point,
+    /// Угол поворота объекта в радианах
+    pub rotate: f32,
+    /// Цвет объекта
     pub color: Color,
+    /// Цвет объекта перед его подсвечиванием
     pub color_old: Option<Color>,
+    /// Mesh объекта
     pub mesh: Mesh,
 }
 
@@ -22,7 +29,7 @@ impl Object {
     pub fn get_mesh(&self) -> Mesh {
         let mut mesh: Mesh = Vec::new();
         for triangle in self.mesh.iter() {
-            mesh.push(triangle.to_absolute(self.position));
+            mesh.push(triangle.to_absolute(self.position, self.rotate));
         }
         mesh
     }

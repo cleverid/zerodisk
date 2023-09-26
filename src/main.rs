@@ -5,6 +5,8 @@ mod primitive;
 mod scene;
 mod uniq_id;
 
+use std::f32::consts::PI;
+
 use meshes::{SquareMesh, TriangleMesh};
 use object::Object;
 use primitive::{point, rgb};
@@ -86,12 +88,22 @@ fn make_scene() -> Scene {
         .build();
     let o2 = Object::new(TriangleMesh::new(100))
         .position(point(250, 250))
+        .rotate(PI / 4.0)
         .color(rgb(max, 0, 0))
+        .build();
+    let o2_1 = Object::new(TriangleMesh::new(100))
+        .position(point(250, 250))
+        .color(rgb(max, 0, 0))
+        .build();
+    let o2_2 = Object::new(SquareMesh::new(2))
+        .position(point(250, 250))
+        .color(rgb(0, 0, 0))
         .build();
     let o3 = Object::new(SquareMesh::new(100))
         .position(point(60, 60))
+        .rotate(PI / 4.0)
         .color(rgb(max, max, max))
         .build();
 
-    Scene::new().add(o1).add(o2).add(o3)
+    Scene::new().add(o1).add(o2).add(o2_1).add(o2_2).add(o3)
 }

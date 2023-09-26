@@ -18,6 +18,15 @@ impl Point {
         return Point { x, y };
     }
 
+    pub fn rotate(&self, angle: f32) -> Point {
+        // Приведем точку к началу координат
+        let x = self.x as f32;
+        let y = self.y as f32;
+        let x2 = x * angle.cos() - y * angle.sin();
+        let y2 = x * angle.sin() + y * angle.cos();
+        return Point { x: x2 as i32, y: y2 as i32 };
+    }
+
     pub fn is_zero(&self) -> bool {
         self.x == 0 && self.y == 0
     }
