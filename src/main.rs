@@ -4,6 +4,7 @@ mod object;
 mod primitive;
 mod scene;
 mod uniq_id;
+mod constraints;
 
 use std::f32::consts::PI;
 
@@ -16,6 +17,7 @@ use winit::{
     event_loop::{ControlFlow, EventLoop},
     window::WindowBuilder,
 };
+use constraints::{DirectConstraint, Axis};
 
 #[tokio::main]
 async fn main() {
@@ -95,7 +97,7 @@ fn make_scene() -> Scene {
         .position(point(250, 250))
         .color(rgb(max, 0, 0))
         .build();
-    let o2_2 = Object::new(SquareMesh::new(2))
+    let o2_2 = Object::new(SquareMesh::new(10))
         .position(point(250, 250))
         .color(rgb(0, 0, 0))
         .build();
@@ -105,5 +107,10 @@ fn make_scene() -> Scene {
         .color(rgb(max, max, max))
         .build();
 
-    Scene::new().add(o1).add(o2).add(o2_1).add(o2_2).add(o3)
+    let constraint = DirectConstraint::new(o3.id.clone(), o1.id.clone(), Axis::X);
+
+    let mut scene = Scene::new();
+    scene.add_objects(vec![o1, o2, o2_1, o3, o2_2]);
+    scene.add_constraint(constraint);
+    scene
 }

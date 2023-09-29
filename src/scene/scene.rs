@@ -3,15 +3,15 @@ use std::collections::{HashMap, HashSet};
 use crate::{
     gpu::{GPUVertex, GetGPUData},
     object::Object,
-    primitive::{point, Point},
+    primitive::{point, Point}, constraints::Constraint,
 };
 
 use super::tracer::Tracer;
 
-#[derive(Clone, Debug)]
 pub struct Scene {
     pub tracer: Tracer,
     objects: HashMap<String, Object>,
+    constraints: Vec<Box<dyn Constraint>>,
     traced: HashSet<String>,
     dragged: HashSet<String>,
     mouse_cursor: Point,
@@ -25,13 +25,19 @@ impl Scene {
             traced: HashSet::new(),
             dragged: HashSet::new(),
             mouse_cursor: point(0, 0),
+            constraints: Vec::new(),
         }
     }
 
-    pub fn add(mut self, object: Object) -> Self {
-        self.objects.insert(object.id.clone(), object.clone());
-        self.tracer.index(object.id.clone(), object.get_mesh());
-        self
+    pub fn add_objects(&mut self, objects: Vec<Object>) {
+        for object in objects.iter() {
+            self.objects.insert(object.id.clone(), object.clone());
+            self.tracer.index(object.id.clone(), object.get_mesh());
+        }
+    }
+
+    pub fn add_constraint(&mut self, constraint: impl Constraint)  {
+        self.constraints.push(Box::new(constraint));
     }
 
     pub fn set_mouse_click_left(&mut self, clicked: bool) {

@@ -24,7 +24,10 @@ impl Point {
         let y = self.y as f32;
         let x2 = x * angle.cos() - y * angle.sin();
         let y2 = x * angle.sin() + y * angle.cos();
-        return Point { x: x2 as i32, y: y2 as i32 };
+        return Point {
+            x: x2 as i32,
+            y: y2 as i32,
+        };
     }
 
     pub fn is_zero(&self) -> bool {
