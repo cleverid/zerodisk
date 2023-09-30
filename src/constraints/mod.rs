@@ -1,10 +1,11 @@
 mod direct;
 
+use std::collections::HashMap;
+
 pub use direct::*;
 use crate::object::Object;
 pub trait Constraint {
-    fn constraint_get_ids(&self) -> Vec<String>;
-    fn constraint_process(&self, objects: Vec<&mut Object>);
+    fn process(&self, objects: &mut HashMap<String, Object>);
 }
 #[derive(Clone, Copy, Debug)]
 pub enum Axis {

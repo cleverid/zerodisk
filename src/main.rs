@@ -17,7 +17,7 @@ use winit::{
     event_loop::{ControlFlow, EventLoop},
     window::WindowBuilder,
 };
-use constraints::{DirectConstraint, Axis};
+use constraints::{DirectConstraint, Axis, Constraint};
 
 #[tokio::main]
 async fn main() {
@@ -56,6 +56,7 @@ async fn main() {
                 WindowEvent::CursorMoved { position, .. } => {
                     let changed = scene.set_mouse_position((*position).into());
                     if changed {
+			scene.process();
                         gpu_state.scene_update(&scene);
                     }
                 }
@@ -84,33 +85,22 @@ async fn main() {
 
 fn make_scene() -> Scene {
     let max = 150;
-    let o1 = Object::new(TriangleMesh::new(100))
+    let o1 = Object::new(SquareMesh::new(100))
         .position(point(150, 150))
         .color(rgb(0, 0, max))
         .build();
     let o2 = Object::new(TriangleMesh::new(100))
-        .position(point(250, 250))
+        .position(point(350, 350))
         .rotate(PI / 4.0)
         .color(rgb(max, 0, 0))
         .build();
-    let o2_1 = Object::new(TriangleMesh::new(100))
-        .position(point(250, 250))
-        .color(rgb(max, 0, 0))
-        .build();
-    let o2_2 = Object::new(SquareMesh::new(10))
-        .position(point(250, 250))
-        .color(rgb(0, 0, 0))
-        .build();
-    let o3 = Object::new(SquareMesh::new(100))
-        .position(point(60, 60))
-        .rotate(PI / 4.0)
-        .color(rgb(max, max, max))
-        .build();
 
-    let constraint = DirectConstraint::new(o3.id.clone(), o1.id.clone(), Axis::X);
-
+    let con1 = DirectConstraint::new(o1.id.clone(), o2.id.clone(), Axis::X);
+    let con2 = DirectConstraint::new(o2.id.clone(), o1.id.clone(), Axis::X);
+    
     let mut scene = Scene::new();
-    scene.add_objects(vec![o1, o2, o2_1, o3, o2_2]);
-    scene.add_constraint(constraint);
+    scene.add_objects(vec![o1, o2]);
+    scene.add_constraint(con1);
+    scene.add_constraint(con2);
     scene
 }

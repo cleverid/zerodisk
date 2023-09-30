@@ -36,10 +36,16 @@ impl Scene {
         }
     }
 
-    pub fn add_constraint(&mut self, constraint: impl Constraint)  {
+    pub fn add_constraint(&mut self, constraint: impl Constraint + 'static)  {
         self.constraints.push(Box::new(constraint));
     }
 
+    pub fn add_constraints(&mut self, constraints: Vec<Box<dyn Constraint + 'static>>)  {
+        for con in constraints {
+	    self.constraints.push(con);
+	}
+    }
+    
     pub fn set_mouse_click_left(&mut self, clicked: bool) {
         if clicked {
             self.dragged = self.traced.clone();
@@ -53,6 +59,12 @@ impl Scene {
         let change_drag = self.drag(point.clone());
         self.mouse_cursor = point;
         change_trace || change_drag
+    }
+
+    pub fn process(&mut self) {
+	for con in self.constraints.iter_mut() {
+	    con.process(&mut self.objects);
+	}
     }
 
     fn trace(&mut self, trace_point: Point) -> bool {
