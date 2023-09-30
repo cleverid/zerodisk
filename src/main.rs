@@ -1,13 +1,14 @@
+mod constraints;
 mod gpu;
 mod meshes;
 mod object;
 mod primitive;
 mod scene;
 mod uniq_id;
-mod constraints;
 
 use std::f32::consts::PI;
 
+use constraints::{Axis, Constraint, DirectConstraint};
 use meshes::{SquareMesh, TriangleMesh};
 use object::Object;
 use primitive::{point, rgb};
@@ -17,7 +18,6 @@ use winit::{
     event_loop::{ControlFlow, EventLoop},
     window::WindowBuilder,
 };
-use constraints::{DirectConstraint, Axis, Constraint};
 
 #[tokio::main]
 async fn main() {
@@ -56,7 +56,7 @@ async fn main() {
                 WindowEvent::CursorMoved { position, .. } => {
                     let changed = scene.set_mouse_position((*position).into());
                     if changed {
-			scene.process();
+                        scene.process();
                         gpu_state.scene_update(&scene);
                     }
                 }
@@ -94,12 +94,16 @@ fn make_scene() -> Scene {
         .rotate(PI / 4.0)
         .color(rgb(max, 0, 0))
         .build();
+    let o3 = Object::new(TriangleMesh::new(50))
+        .position(point(500, 500))
+        .color(rgb(max, max, 0))
+        .build();
 
     let con1 = DirectConstraint::new(o1.id.clone(), o2.id.clone(), Axis::X);
     let con2 = DirectConstraint::new(o2.id.clone(), o1.id.clone(), Axis::X);
-    
+
     let mut scene = Scene::new();
-    scene.add_objects(vec![o1, o2]);
+    scene.add_objects(vec![o1, o2, o3]);
     scene.add_constraint(con1);
     scene.add_constraint(con2);
     scene

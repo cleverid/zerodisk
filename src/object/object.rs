@@ -52,7 +52,7 @@ impl Object {
     }
 
     pub fn rotate(&mut self, angle: f32) {
-	self.rotate = angle;
+        self.rotate = angle;
     }
 
     pub fn move_object(&mut self, moved: Point) {

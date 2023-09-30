@@ -1,9 +1,10 @@
 use std::collections::{HashMap, HashSet};
 
 use crate::{
+    constraints::Constraint,
     gpu::{GPUVertex, GetGPUData},
     object::Object,
-    primitive::{point, Point}, constraints::Constraint,
+    primitive::{point, Point},
 };
 
 use super::tracer::Tracer;
@@ -36,16 +37,16 @@ impl Scene {
         }
     }
 
-    pub fn add_constraint(&mut self, constraint: impl Constraint + 'static)  {
+    pub fn add_constraint(&mut self, constraint: impl Constraint + 'static) {
         self.constraints.push(Box::new(constraint));
     }
 
-    pub fn add_constraints(&mut self, constraints: Vec<Box<dyn Constraint + 'static>>)  {
+    pub fn add_constraints(&mut self, constraints: Vec<Box<dyn Constraint + 'static>>) {
         for con in constraints {
-	    self.constraints.push(con);
-	}
+            self.constraints.push(con);
+        }
     }
-    
+
     pub fn set_mouse_click_left(&mut self, clicked: bool) {
         if clicked {
             self.dragged = self.traced.clone();
@@ -62,9 +63,9 @@ impl Scene {
     }
 
     pub fn process(&mut self) {
-	for con in self.constraints.iter_mut() {
-	    con.process(&mut self.objects);
-	}
+        for con in self.constraints.iter_mut() {
+            con.process(&mut self.objects);
+        }
     }
 
     fn trace(&mut self, trace_point: Point) -> bool {

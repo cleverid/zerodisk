@@ -2,8 +2,8 @@ mod direct;
 
 use std::collections::HashMap;
 
-pub use direct::*;
 use crate::object::Object;
+pub use direct::*;
 pub trait Constraint {
     fn process(&self, objects: &mut HashMap<String, Object>);
 }
