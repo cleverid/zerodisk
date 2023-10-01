@@ -1,5 +1,6 @@
 mod constraints;
 mod gpu;
+mod helpers;
 mod meshes;
 mod object;
 mod primitive;
@@ -114,8 +115,8 @@ fn make_scene() -> Scene {
         o3.id.clone(),
         o4.id.clone(),
         |object, params| {
-            println!("{:?}", params);
             object.rotate(params.angle);
+            object.position(params.middle);
         },
     );
 

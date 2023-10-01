@@ -1,28 +1,34 @@
 use super::Constraint;
+use crate::helpers::{angle_direct, middle};
 use crate::object::{self, Object};
 use crate::primitive::{point, Point};
 use std::collections::HashMap;
 
 #[derive(Debug, Copy, Clone)]
 pub struct BetweenResult {
-    pub position: Point,
+    pub middle: Point,
     pub angle: f32,
     pub distance: f32,
 }
 type Callback = fn(&mut Object, BetweenResult);
 
 pub struct BetweenConstraint {
-    middle_id: String,
+    constraint_id: String,
     from_id: String,
     target_id: String,
     callback: Callback,
 }
 
 impl BetweenConstraint {
-    pub fn new(middle_id: String, from_id: String, target_id: String, callback: Callback) -> Self {
+    pub fn new(
+        constraint_id: String,
+        from_id: String,
+        target_id: String,
+        callback: Callback,
+    ) -> Self {
         Self {
+            constraint_id,
             from_id,
-            middle_id,
             target_id,
             callback,
         }
@@ -31,12 +37,14 @@ impl BetweenConstraint {
 
 impl Constraint for BetweenConstraint {
     fn process(&self, objects: &mut HashMap<String, Object>) {
-        let mut object = objects.get_mut(&self.middle_id).unwrap();
+        let from = objects.get(&self.from_id).unwrap().position;
+        let target = objects.get(&self.target_id).unwrap().position;
+        let mut constraint = objects.get_mut(&self.constraint_id).unwrap();
         (self.callback)(
-            object,
+            constraint,
             BetweenResult {
-                position: point(0, 0),
-                angle: 12.0,
+                middle: middle(from, target),
+                angle: angle_direct(from, target),
                 distance: 12.0,
             },
         )
