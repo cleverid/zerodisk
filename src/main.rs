@@ -8,7 +8,7 @@ mod uniq_id;
 
 use std::f32::consts::PI;
 
-use constraints::{Axis, Constraint, DirectConstraint};
+use constraints::{Axis, BetweenConstraint, Constraint, DirectConstraint};
 use meshes::{SquareMesh, TriangleMesh};
 use object::Object;
 use primitive::{point, rgb};
@@ -98,13 +98,31 @@ fn make_scene() -> Scene {
         .position(point(500, 500))
         .color(rgb(max, max, 0))
         .build();
+    let o3_4 = Object::new(SquareMesh::new(10))
+        .position(point(600, 600))
+        .color(rgb(max, max, max))
+        .build();
+    let o4 = Object::new(TriangleMesh::new(50))
+        .position(point(700, 700))
+        .color(rgb(max, max, 0))
+        .build();
 
     let con1 = DirectConstraint::new(o1.id.clone(), o2.id.clone(), Axis::X);
     let con2 = DirectConstraint::new(o2.id.clone(), o1.id.clone(), Axis::X);
+    let con3 = BetweenConstraint::new(
+        o3_4.id.clone(),
+        o3.id.clone(),
+        o4.id.clone(),
+        |object, params| {
+            println!("{:?}", params);
+            object.rotate(params.angle);
+        },
+    );
 
     let mut scene = Scene::new();
-    scene.add_objects(vec![o1, o2, o3]);
+    scene.add_objects(vec![o1, o2, o3, o3_4, o4]);
     scene.add_constraint(con1);
     scene.add_constraint(con2);
+    scene.add_constraint(con3);
     scene
 }
