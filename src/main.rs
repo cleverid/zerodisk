@@ -10,7 +10,7 @@ mod uniq_id;
 use std::f32::consts::PI;
 
 use constraints::{Axis, BetweenConstraint, Constraint, DirectConstraint};
-use meshes::{SquareMesh, TriangleMesh};
+use meshes::{RectangleMesh, SquareMesh, TriangleMesh};
 use object::Object;
 use primitive::{point, rgb};
 use scene::Scene;
@@ -95,15 +95,15 @@ fn make_scene() -> Scene {
         .rotate(PI / 4.0)
         .color(rgb(max, 0, 0))
         .build();
-    let o3 = Object::new(TriangleMesh::new(50))
+    let o3 = Object::new(SquareMesh::new(15))
         .position(point(500, 500))
         .color(rgb(max, max, 0))
         .build();
-    let o3_4 = Object::new(SquareMesh::new(10))
+    let o3_4 = Object::new(RectangleMesh::new(4, 100))
         .position(point(600, 600))
         .color(rgb(max, max, max))
         .build();
-    let o4 = Object::new(TriangleMesh::new(50))
+    let o4 = Object::new(SquareMesh::new(15))
         .position(point(700, 700))
         .color(rgb(max, max, 0))
         .build();
@@ -117,6 +117,7 @@ fn make_scene() -> Scene {
         |object, params| {
             object.rotate(params.angle);
             object.position(params.middle);
+            object.mesh(RectangleMesh::new(4, params.distance))
         },
     );
 

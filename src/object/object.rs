@@ -59,6 +59,10 @@ impl Object {
         self.rotate = angle;
     }
 
+    pub fn mesh(&mut self, mesh: impl GetMesh) {
+        self.mesh = mesh.get_mesh_data();
+    }
+
     pub fn move_object(&mut self, moved: Point) {
         self.position = self.position + moved;
     }

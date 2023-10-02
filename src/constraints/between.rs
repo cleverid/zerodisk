@@ -1,5 +1,5 @@
 use super::Constraint;
-use crate::helpers::{angle_direct, middle};
+use crate::helpers::{angle_direct, distance, middle};
 use crate::object::{self, Object};
 use crate::primitive::{point, Point};
 use std::collections::HashMap;
@@ -8,7 +8,7 @@ use std::collections::HashMap;
 pub struct BetweenResult {
     pub middle: Point,
     pub angle: f32,
-    pub distance: f32,
+    pub distance: u32,
 }
 type Callback = fn(&mut Object, BetweenResult);
 
@@ -45,7 +45,7 @@ impl Constraint for BetweenConstraint {
             BetweenResult {
                 middle: middle(from, target),
                 angle: angle_direct(from, target),
-                distance: 12.0,
+                distance: distance(from, target),
             },
         )
     }
