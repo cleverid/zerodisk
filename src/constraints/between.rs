@@ -1,7 +1,7 @@
-use super::Constraint;
+use super::{Axis, Constraint};
 use crate::helpers::{angle_direct, distance, middle};
-use crate::object::{self, Object};
-use crate::primitive::{point, Point};
+use crate::object::Object;
+use crate::primitive::Point;
 use std::collections::HashMap;
 
 #[derive(Debug, Copy, Clone)]
@@ -39,12 +39,12 @@ impl Constraint for BetweenConstraint {
     fn process(&self, objects: &mut HashMap<String, Object>) {
         let from = objects.get(&self.from_id).unwrap().position;
         let target = objects.get(&self.target_id).unwrap().position;
-        let mut constraint = objects.get_mut(&self.constraint_id).unwrap();
+        let constraint = objects.get_mut(&self.constraint_id).unwrap();
         (self.callback)(
             constraint,
             BetweenResult {
                 middle: middle(from, target),
-                angle: angle_direct(from, target),
+                angle: angle_direct(from, target, Axis::Y, false),
                 distance: distance(from, target),
             },
         )

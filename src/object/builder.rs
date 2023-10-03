@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use super::Object;
 use crate::meshes::{GetMesh, TriangleMesh};
 use crate::primitive::{point, Color, ColorBuilder, Mesh, Point};

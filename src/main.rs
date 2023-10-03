@@ -7,9 +7,7 @@ mod primitive;
 mod scene;
 mod uniq_id;
 
-use std::f32::consts::PI;
-
-use constraints::{Axis, BetweenConstraint, Constraint, DirectConstraint};
+use constraints::{Axis, BetweenConstraint, DirectConstraint};
 use meshes::{RectangleMesh, SquareMesh, TriangleMesh};
 use object::Object;
 use primitive::{point, rgb};
@@ -86,34 +84,59 @@ async fn main() {
 
 fn make_scene() -> Scene {
     let max = 150;
-    let o1 = Object::new(SquareMesh::new(100))
-        .position(point(150, 150))
-        .color(rgb(0, 0, max))
-        .build();
-    let o2 = Object::new(TriangleMesh::new(100))
-        .position(point(350, 350))
-        .rotate(PI / 4.0)
+
+    // Стрелка
+    let arrow_start = Object::new(RectangleMesh::new(20, 4))
+        .position(point(100, 100))
         .color(rgb(max, 0, 0))
         .build();
-    let o3 = Object::new(SquareMesh::new(15))
+    let arrow_line = Object::new(RectangleMesh::new(4, 100))
+        .color(rgb(max, 0, 0))
+        .build();
+    let arrow_target = Object::new(TriangleMesh::new(20))
+        .position(point(300, 100))
+        .color(rgb(max, 0, 0))
+        .build();
+    let arrow_con1 = DirectConstraint::new(
+        arrow_start.id.clone(),
+        arrow_target.id.clone(),
+        Axis::Y,
+        true,
+    );
+    let arrow_con2 = DirectConstraint::new(
+        arrow_target.id.clone(),
+        arrow_start.id.clone(),
+        Axis::Y,
+        true,
+    );
+    let arrow_con3 = BetweenConstraint::new(
+        arrow_line.id.clone(),
+        arrow_start.id.clone(),
+        arrow_target.id.clone(),
+        |object, params| {
+            object.rotate(params.angle);
+            object.position(params.middle);
+            object.mesh(RectangleMesh::new(4, params.distance))
+        },
+    );
+
+    // Линия между двумя точками
+    let line_start = Object::new(SquareMesh::new(15))
         .position(point(500, 500))
         .color(rgb(max, max, 0))
         .build();
-    let o3_4 = Object::new(RectangleMesh::new(4, 100))
+    let line = Object::new(RectangleMesh::new(4, 100))
         .position(point(600, 600))
         .color(rgb(max, max, max))
         .build();
-    let o4 = Object::new(SquareMesh::new(15))
+    let line_end = Object::new(SquareMesh::new(15))
         .position(point(700, 700))
         .color(rgb(max, max, 0))
         .build();
-
-    let con1 = DirectConstraint::new(o1.id.clone(), o2.id.clone(), Axis::X);
-    let con2 = DirectConstraint::new(o2.id.clone(), o1.id.clone(), Axis::X);
-    let con3 = BetweenConstraint::new(
-        o3_4.id.clone(),
-        o3.id.clone(),
-        o4.id.clone(),
+    let line_con1 = BetweenConstraint::new(
+        line.id.clone(),
+        line_start.id.clone(),
+        line_end.id.clone(),
         |object, params| {
             object.rotate(params.angle);
             object.position(params.middle);
@@ -122,9 +145,21 @@ fn make_scene() -> Scene {
     );
 
     let mut scene = Scene::new();
-    scene.add_objects(vec![o1, o2, o3, o3_4, o4]);
-    scene.add_constraint(con1);
-    scene.add_constraint(con2);
-    scene.add_constraint(con3);
+    scene.add_objects(vec![
+        arrow_start,
+        arrow_line,
+        arrow_target,
+        line_start,
+        line,
+        line_end,
+    ]);
+    scene.add_constraints(vec![
+        Box::new(arrow_con1),
+        Box::new(arrow_con2),
+        Box::new(arrow_con3),
+    ]);
+    scene.add_constraint(line_con1);
+    scene.process();
+
     scene
 }

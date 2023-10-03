@@ -10,6 +10,7 @@ pub trait Constraint {
     fn process(&self, objects: &mut HashMap<String, Object>);
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug)]
 pub enum Axis {
     X = 1,
