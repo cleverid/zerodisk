@@ -70,6 +70,12 @@
     ]);
     scene.process();
 ```
+
+Запуск
+```bash
+cd client && cargo run
+```
+
 Результат работы клиентской части
 ![](./docs/arrow.gif)
 
