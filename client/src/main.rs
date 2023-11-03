@@ -85,6 +85,11 @@ async fn main() {
 fn make_scene() -> Scene {
     let max = 150;
 
+    let cube = Object::new(RectangleMesh::new(100, 100))
+        .position(point(400, 400))
+        .color(rgb(max, max, 0))
+        .build();
+
     // Стрелка
     let arrow_start = Object::new(RectangleMesh::new(25, 8))
         .position(point(100, 100))
@@ -152,6 +157,7 @@ fn make_scene() -> Scene {
         line_start,
         line,
         line_end,
+        cube
     ]);
     scene.add_constraints(vec![
         Box::new(arrow_con1),
