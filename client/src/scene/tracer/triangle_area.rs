@@ -13,14 +13,14 @@ mod test {
 
     #[test]
     fn right_triangle() {
-        let triangle = triangle([[0, 0], [3, 0], [0, 4]]);
+        let triangle = triangle([[0.0, 0.0], [3.0, 0.0], [0.0, 4.0]]);
         let area = triangle_area(triangle);
         assert_eq!(area, 6.0);
     }
 
     #[test]
     fn eq_side_triangle() {
-        let triangle = triangle([[0, 2], [-1, 0], [1, 0]]);
+        let triangle = triangle([[0.0, 2.0], [-1.0, 0.0], [1.0, 0.0]]);
         let area = triangle_area(triangle);
         assert_eq!(area, 2.0);
     }

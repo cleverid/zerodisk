@@ -25,7 +25,7 @@ impl Scene {
             tracer: Tracer::new(),
             traced: HashSet::new(),
             dragged: HashSet::new(),
-            mouse_cursor: point(0, 0),
+            mouse_cursor: point(0.0, 0.0),
             constraints: Vec::new(),
         }
     }

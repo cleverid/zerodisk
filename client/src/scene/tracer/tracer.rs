@@ -42,11 +42,11 @@ mod tests {
     #[test]
     fn trace_one_object_one_triangle() {
         let mut mesh1: Mesh = Vec::with_capacity(1);
-        mesh1.push(triangle([[0, 0], [3, 0], [0, 4]]));
+        mesh1.push(triangle([[0.0, 0.0], [3.0, 0.0], [0.0, 4.0]]));
 
         let mut tracer = Tracer::new();
         tracer.index(String::from("1"), mesh1);
-        let result = tracer.trace(point(1, 1));
+        let result = tracer.trace(point(1.0, 1.0));
 
         assert_eq!(result.len(), 1);
         assert_eq!(result[0], "1");
@@ -55,12 +55,12 @@ mod tests {
     #[test]
     fn trace_one_object_second_triangle() {
         let mut mesh1: Mesh = Vec::with_capacity(1);
-        mesh1.push(triangle([[0, 0], [3, 0], [0, 4]]));
-        mesh1.push(triangle([[0, 4], [3, 0], [3, 4]]));
+        mesh1.push(triangle([[0.0, 0.0], [3.0, 0.0], [0.0, 4.0]]));
+        mesh1.push(triangle([[0.0, 4.0], [3.0, 0.0], [3.0, 4.0]]));
 
         let mut tracer = Tracer::new();
         tracer.index(String::from("1"), mesh1);
-        let result = tracer.trace(point(3, 3));
+        let result = tracer.trace(point(3.0, 3.0));
 
         assert_eq!(result.len(), 1);
         assert_eq!(result[0], "1");
@@ -69,14 +69,14 @@ mod tests {
     #[test]
     fn trace_second_object_one_triangle() {
         let mut mesh1: Mesh = Vec::with_capacity(1);
-        mesh1.push(triangle([[0, 0], [3, 0], [0, 4]]));
+        mesh1.push(triangle([[0.0, 0.0], [3.0, 0.0], [0.0, 4.0]]));
         let mut mesh2: Mesh = Vec::with_capacity(1);
-        mesh2.push(triangle([[0, 4], [3, 0], [3, 4]]));
+        mesh2.push(triangle([[0.0, 4.0], [3.0, 0.0], [3.0, 4.0]]));
 
         let mut tracer = Tracer::new();
         tracer.index(String::from("1"), mesh1);
         tracer.index(String::from("2"), mesh2);
-        let result = tracer.trace(point(3, 3));
+        let result = tracer.trace(point(3.0, 3.0));
 
         assert_eq!(result.len(), 1);
         assert_eq!(result[0], "2");

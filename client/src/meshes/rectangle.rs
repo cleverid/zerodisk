@@ -14,8 +14,8 @@ impl RectangleMesh {
 
 impl GetMesh for RectangleMesh {
     fn get_mesh_data(self) -> Mesh {
-        let w = (self.width / 2) as i32;
-        let h = (self.height / 2) as i32;
+        let w = (self.width / 2) as f32;
+        let h = (self.height / 2) as f32;
         vec![
             triangle([[w, h], [-w, -h], [-w, h]]),
             triangle([[w, h], [w, -h], [-w, -h]]),

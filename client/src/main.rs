@@ -86,20 +86,20 @@ fn make_scene() -> Scene {
     let max = 150;
 
     let cube = Object::new(RectangleMesh::new(100, 100))
-        .position(point(400, 400))
+        .position(point(400.0, 400.0))
         .color(rgb(max, max, 0))
         .build();
 
     // Стрелка
     let arrow_start = Object::new(RectangleMesh::new(25, 8))
-        .position(point(100, 100))
+        .position(point(100.0, 100.0))
         .color(rgb(max, max, 0))
         .build();
     let arrow_line = Object::new(RectangleMesh::new(4, 100))
         .color(rgb(max, max, 0))
         .build();
     let arrow_target = Object::new(TriangleMesh::new(25))
-        .position(point(300, 100))
+        .position(point(300.0, 100.0))
         .color(rgb(max, max, 0))
         .build();
     let arrow_con1 = DirectConstraint::new(
@@ -127,15 +127,15 @@ fn make_scene() -> Scene {
 
     // Линия между двумя точками
     let line_start = Object::new(SquareMesh::new(15))
-        .position(point(500, 500))
+        .position(point(500.0, 500.0))
         .color(rgb(max, max, 0))
         .build();
     let line = Object::new(RectangleMesh::new(4, 100))
-        .position(point(600, 600))
+        .position(point(600.0, 600.0))
         .color(rgb(max, max, max))
         .build();
     let line_end = Object::new(SquareMesh::new(15))
-        .position(point(700, 700))
+        .position(point(700.0, 700.0))
         .color(rgb(max, max, 0))
         .build();
     let line_con1 = BetweenConstraint::new(
@@ -157,7 +157,7 @@ fn make_scene() -> Scene {
         line_start,
         line,
         line_end,
-        cube
+        cube,
     ]);
     scene.add_constraints(vec![
         Box::new(arrow_con1),

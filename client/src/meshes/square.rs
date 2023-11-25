@@ -13,7 +13,7 @@ impl SquareMesh {
 
 impl GetMesh for SquareMesh {
     fn get_mesh_data(self) -> Mesh {
-        let w = (self.width / 2) as i32;
+        let w = (self.width / 2) as f32;
         vec![
             triangle([[w, w], [-w, -w], [-w, w]]),
             triangle([[w, w], [w, -w], [-w, -w]]),

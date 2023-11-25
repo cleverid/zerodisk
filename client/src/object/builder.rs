@@ -36,7 +36,7 @@ impl ObjectBuilder {
     pub fn build(self) -> Object {
         Object {
             id: gen_id(),
-            position: self.position.unwrap_or(point(0, 0)),
+            position: self.position.unwrap_or(point(0.0, 0.0)),
             rotate: self.rotate.unwrap_or(0.0),
             color: self.color.unwrap_or(ColorBuilder::new().build()),
             color_old: None,

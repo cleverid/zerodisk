@@ -1,5 +1,5 @@
 use super::Point;
 
-pub fn point(x: i32, y: i32) -> Point {
+pub fn point(x: f32, y: f32) -> Point {
     Point { x, y }
 }

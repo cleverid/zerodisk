@@ -26,32 +26,32 @@ mod test {
 
     #[test]
     fn in_triangle() {
-        let triangle = triangle([[0, 0], [3, 0], [0, 4]]);
-        let point = point(1, 1);
+        let triangle = triangle([[0.0, 0.0], [3.0, 0.0], [0.0, 4.0]]);
+        let point = point(1.0, 1.0);
         let result = triangle_has_point(triangle, point);
         assert_eq!(result, true);
     }
 
     #[test]
     fn in_point() {
-        let triangle = triangle([[0, 0], [3, 0], [0, 4]]);
-        let point = point(0, 0);
+        let triangle = triangle([[0.0, 0.0], [3.0, 0.0], [0.0, 4.0]]);
+        let point = point(0.0, 0.0);
         let result = triangle_has_point(triangle, point);
         assert_eq!(result, true);
     }
 
     #[test]
     fn in_edge() {
-        let triangle = triangle([[0, 0], [3, 0], [0, 4]]);
-        let point = point(0, 1);
+        let triangle = triangle([[0.0, 0.0], [3.0, 0.0], [0.0, 4.0]]);
+        let point = point(0.0, 1.0);
         let result = triangle_has_point(triangle, point);
         assert_eq!(result, true);
     }
 
     #[test]
     fn out() {
-        let triangle = triangle([[0, 0], [3, 0], [0, 4]]);
-        let point = point(4, 0);
+        let triangle = triangle([[0.0, 0.0], [3.0, 0.0], [0.0, 4.0]]);
+        let point = point(4.0, 0.0);
         let result = triangle_has_point(triangle, point);
         assert_eq!(result, false);
     }
