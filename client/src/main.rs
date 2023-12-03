@@ -1,3 +1,4 @@
+mod app;
 mod constraints;
 mod gpu;
 mod helpers;
@@ -7,10 +8,8 @@ mod primitive;
 mod scene;
 mod uniq_id;
 
-use constraints::{Axis, BetweenConstraint, DirectConstraint};
-use meshes::{RectangleMesh, SquareMesh, TriangleMesh};
-use object::Object;
-use primitive::{point, rgb};
+use app::{Application, Arrow};
+use primitive::point;
 use scene::Scene;
 use winit::{
     event::*,
@@ -83,89 +82,9 @@ async fn main() {
 }
 
 fn make_scene() -> Scene {
-    let max = 150;
-
-    let cube = Object::new(RectangleMesh::new(100, 100))
-        .position(point(400.0, 400.0))
-        .color(rgb(max, max, 0))
-        .build();
-
-    // Стрелка
-    let arrow_start = Object::new(RectangleMesh::new(25, 8))
-        .position(point(100.0, 100.0))
-        .color(rgb(max, max, 0))
-        .build();
-    let arrow_line = Object::new(RectangleMesh::new(4, 100))
-        .color(rgb(max, max, 0))
-        .build();
-    let arrow_target = Object::new(TriangleMesh::new(25))
-        .position(point(300.0, 100.0))
-        .color(rgb(max, max, 0))
-        .build();
-    let arrow_con1 = DirectConstraint::new(
-        arrow_start.id.clone(),
-        arrow_target.id.clone(),
-        Axis::Y,
-        true,
-    );
-    let arrow_con2 = DirectConstraint::new(
-        arrow_target.id.clone(),
-        arrow_start.id.clone(),
-        Axis::Y,
-        true,
-    );
-    let arrow_con3 = BetweenConstraint::new(
-        arrow_line.id.clone(),
-        arrow_start.id.clone(),
-        arrow_target.id.clone(),
-        |object, params| {
-            object.rotate(params.angle);
-            object.position(params.middle);
-            object.mesh(RectangleMesh::new(4, params.distance))
-        },
-    );
-
-    // Линия между двумя точками
-    let line_start = Object::new(SquareMesh::new(15))
-        .position(point(500.0, 500.0))
-        .color(rgb(max, max, 0))
-        .build();
-    let line = Object::new(RectangleMesh::new(4, 100))
-        .position(point(600.0, 600.0))
-        .color(rgb(max, max, max))
-        .build();
-    let line_end = Object::new(SquareMesh::new(15))
-        .position(point(700.0, 700.0))
-        .color(rgb(max, max, 0))
-        .build();
-    let line_con1 = BetweenConstraint::new(
-        line.id.clone(),
-        line_start.id.clone(),
-        line_end.id.clone(),
-        |object, params| {
-            object.rotate(params.angle);
-            object.position(params.middle);
-            object.mesh(RectangleMesh::new(4, params.distance))
-        },
-    );
-
     let mut scene = Scene::new();
-    scene.add_objects(vec![
-        arrow_start,
-        arrow_line,
-        arrow_target,
-        line_start,
-        line,
-        line_end,
-        cube,
-    ]);
-    scene.add_constraints(vec![
-        Box::new(arrow_con1),
-        Box::new(arrow_con2),
-        Box::new(arrow_con3),
-    ]);
-    scene.add_constraint(line_con1);
-    scene.process();
-
+    let mut app = Application::new();
+    app.add_component(Arrow::new(point(100.0, 100.0), point(300.0, 100.0)));
+    app.init(&mut scene);
     scene
 }
