@@ -19,10 +19,14 @@ use winit::{
 
 #[tokio::main]
 async fn main() {
+    let mut scene = Scene::new();
+    let mut app = Application::new();
+    app.add_component(Arrow::new(point(100.0, 100.0), point(300.0, 100.0)));
+    app.init(&mut scene);
+
     env_logger::init();
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
-    let mut scene = make_scene();
     let mut gpu_state = gpu::State::new(&window, &scene).await;
 
     event_loop.run(move |event, _, control_flow| match event {
@@ -79,12 +83,4 @@ async fn main() {
         }
         _ => (),
     });
-}
-
-fn make_scene() -> Scene {
-    let mut scene = Scene::new();
-    let mut app = Application::new();
-    app.add_component(Arrow::new(point(100.0, 100.0), point(300.0, 100.0)));
-    app.init(&mut scene);
-    scene
 }

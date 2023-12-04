@@ -6,6 +6,7 @@ use crate::primitive::{point, Color, ColorBuilder, Mesh, Point};
 use crate::uniq_id::gen_id;
 
 pub struct ObjectBuilder {
+    pub id: Option<String>,
     pub position: Option<Point>,
     pub rotate: Option<f32>,
     pub color: Option<Color>,
@@ -15,11 +16,16 @@ pub struct ObjectBuilder {
 impl ObjectBuilder {
     pub fn new(mesh: Mesh) -> Self {
         Self {
+            id: None,
             position: None,
             color: None,
             rotate: None,
             mesh: Some(mesh),
         }
+    }
+    pub fn id(mut self, id: String) -> Self {
+        self.id = Some(id);
+        self
     }
     pub fn position(mut self, point: Point) -> Self {
         self.position = Some(point);
@@ -35,7 +41,7 @@ impl ObjectBuilder {
     }
     pub fn build(self) -> Object {
         Object {
-            id: gen_id(),
+            id: self.id.unwrap_or(gen_id()),
             position: self.position.unwrap_or(point(0.0, 0.0)),
             rotate: self.rotate.unwrap_or(0.0),
             color: self.color.unwrap_or(ColorBuilder::new().build()),

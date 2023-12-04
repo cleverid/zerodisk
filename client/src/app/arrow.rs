@@ -16,7 +16,7 @@ pub struct Arrow {
 
 impl Arrow {
     pub fn new(start: Point, end: Point) -> Arrow {
-        let color = rgb(255, 255, 0);
+        let color = rgb(180, 180, 0);
         let ids = HashMap::from([
             ("start".to_string(), gen_id()),
             ("line".to_string(), gen_id()),
@@ -48,17 +48,27 @@ impl Component for Arrow {
                 object.mesh(RectangleMesh::new(4, params.distance))
             },
         );
+        scene.add_constraint(con1);
+        scene.add_constraint(con2);
+        scene.add_constraint(con3);
     }
 
     fn render(&self) -> Vec<Object> {
+        let id_start = self.ids.get("start").unwrap();
+        let id_line = self.ids.get("line").unwrap();
+        let id_end = self.ids.get("end").unwrap();
+
         let start = Object::new(RectangleMesh::new(25, 8))
+            .id(id_start.clone())
             .position(self.start)
             .color(self.color)
             .build();
         let line = Object::new(RectangleMesh::new(4, 100))
+            .id(id_line.clone())
             .color(self.color)
             .build();
         let target = Object::new(TriangleMesh::new(25))
+            .id(id_end.clone())
             .position(self.end)
             .color(self.color)
             .build();
