@@ -23,7 +23,9 @@ pub struct Scene {
 impl Scene {
     pub fn new() -> Self {
         let mut dispatcher = Dispatcher::new();
-        dispatcher.on(Event::Click);
+        dispatcher.on("id_any".to_string(), Event::Click, |event| {
+            println!("{:?}", event);
+        });
         Scene {
             objects: HashMap::new(),
             tracer: Tracer::new(),

@@ -1,17 +1,26 @@
 use super::Event;
+use std::collections::HashMap;
 
-pub struct Dispatcher {}
+type Callback = fn(event: Event);
+type ItemCallback = HashMap<String, Callback>;
+type Register = HashMap<Event, ItemCallback>;
+
+pub struct Dispatcher {
+    register: Register,
+}
 
 pub trait IDispatcher {
-    fn on(&mut self, event: Event);
+    fn on(&mut self, id: String, event: Event, cb: Callback);
 }
 
 impl Dispatcher {
     pub fn new() -> Self {
-        Dispatcher {}
+        Dispatcher {
+            register: HashMap::new(),
+        }
     }
 }
 
 impl IDispatcher for Dispatcher {
-    fn on(&mut self, event: Event) {}
+    fn on(&mut self, id: String, event: Event, cb: Callback) {}
 }
