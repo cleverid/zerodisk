@@ -2,6 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use crate::{
     constraints::Constraint,
+    dispatcher::{Dispatcher, Event, IDispatcher},
     gpu::{GPUVertex, GetGPUData},
     object::Object,
     primitive::{point, Point},
@@ -16,10 +17,13 @@ pub struct Scene {
     traced: HashSet<String>,
     dragged: HashSet<String>,
     mouse_cursor: Point,
+    dispatcher: Box<dyn IDispatcher>,
 }
 
 impl Scene {
     pub fn new() -> Self {
+        let mut dispatcher = Dispatcher::new();
+        dispatcher.on(Event::Click);
         Scene {
             objects: HashMap::new(),
             tracer: Tracer::new(),
@@ -27,6 +31,7 @@ impl Scene {
             dragged: HashSet::new(),
             mouse_cursor: point(0.0, 0.0),
             constraints: Vec::new(),
+            dispatcher: Box::new(dispatcher),
         }
     }
 

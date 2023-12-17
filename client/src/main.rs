@@ -1,5 +1,6 @@
 mod app;
 mod constraints;
+mod dispatcher;
 mod gpu;
 mod helpers;
 mod meshes;
