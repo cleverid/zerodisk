@@ -22,5 +22,12 @@ impl Dispatcher {
 }
 
 impl IDispatcher for Dispatcher {
-    fn on(&mut self, id: String, event: Event, cb: Callback) {}
+    fn on(&mut self, id: String, event: Event, cb: Callback) {
+        self.register
+            .entry(event)
+            .and_modify(|i| {
+                i.insert(id.clone(), cb);
+            })
+            .or_insert(HashMap::from([(id.clone(), cb)]));
+    }
 }
